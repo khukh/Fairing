@@ -9,6 +9,14 @@
 #ifndef PCH_H
 #define PCH_H
 
+#include "Constants.h"
+#include "matrix.h"
+#include "Vect.h"
+#include "vOperator.h"
+
+#include "RGParam.h"
+#include <random>
+
 // TODO: add headers that you want to pre-compile here
 
 #endif //PCH_H

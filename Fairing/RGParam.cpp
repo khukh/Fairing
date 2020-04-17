@@ -19,7 +19,8 @@ RGParam::RGParam(double pitch, double yaw, double roll) {
 
 
 void RGParam::norm() {
-	double abs = sqrt(pow(RGPar.vect[0], 2) + pow(RGPar.vect[1], 2) + pow(RGPar.vect[2], 2) + pow(RGPar.vect[3], 2));
+	//double abs = sqrt(pow(RGPar.vect[0], 2) + pow(RGPar.vect[1], 2) + pow(RGPar.vect[2], 2) + pow(RGPar.vect[3], 2));
+	double abs = sqrt(RGPar.vect[0] * RGPar.vect[0] + RGPar.vect[1] * RGPar.vect[1] + RGPar.vect[2] * RGPar.vect[2] + RGPar.vect[3] * RGPar.vect[3]);
 	for (int i = 0; i < 4; i++) {
 		RGPar.vect[i] /= abs;
 	}

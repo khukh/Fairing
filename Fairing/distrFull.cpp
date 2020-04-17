@@ -57,10 +57,10 @@ void distrFull::nonIntegr()
 
 	//parametr[0] += Wx;
 	//parametr[2] += Wz;
-
+	//Ve = 0;
 	Ve = OMEGA_EARTH * RA_EL*(1 - ALPHA_EL * sin(LAT) * sin(LAT)) * cos(LAT);
 	//std::vector <double> v(3);
-	Vect<3> vg = { parametr.vect[0] - Ve * sin(azimut) - Wx,parametr.vect[1],parametr.vect[2] - Ve * cos(azimut) -Wz};
+	Vect<3> vg = { parametr.vect[0] - Ve * sin(azimut) /*- Wx*/,parametr.vect[1],parametr.vect[2] - Ve * cos(azimut) /*-Wz*/};
 	Rot.fromRGtoMatrixT();
 	v = Rot.A*vg;
 
@@ -68,20 +68,26 @@ void distrFull::nonIntegr()
 	vv = sqrt(vFullsq);
 
 
-
 	
 	density = GOST4401.roFunc(h);
-	std::normal_distribution<> dDensity{ density, sqrt(0.05*density)/3 };
-	density = dDensity(gen1);
+	d1 = density;
+	double dens1 = density*1E6;
+//	double qdfg = sqrt(0.05*dens1) / 3;
+	std::normal_distribution<> dDensity{ dens1, /*sqrt(*/0.05*dens1/3 };
+	density = dDensity(gen1)/1E6;
+	//density *= 1.05;
 	pressure = GOST4401.pFunc(h);
-	std::normal_distribution<> dPressure{ pressure, sqrt(0.05*pressure)/3 };
+	std::normal_distribution<> dPressure{ pressure, /*sqrt(*/0.05*pressure/3 };
+	p1 = pressure;
 	pressure = dPressure(gen1);
+	//pressure *= 1.05;
 	double ah = atan2(-v.vect[1], v.vect[0]);
 	alpha = ah;
 	betta = (vFullsq < 1E-7) ? 0 : atan2(v.vect[2], sqrt(v.vect[0] * v.vect[0] + v.vect[1] * v.vect[1]));
 	double alphaSpace = sqrt(alpha*alpha + betta * betta);
 	double temperature = pressure / (287.05287*density);
 	double aSonic = 20.046796*sqrt(temperature);
+	//a1 = vv/ GOST4401.aFunc(h);
 	mach = vv / aSonic;
 
 	q = density * vFullsq / 2;
@@ -92,20 +98,19 @@ void distrFull::nonIntegr()
 	//double height = r - RA_EL * (1 - ALPHA_EL * sin(LAT)*sin(LAT));
 	cx = CxPas(mach, alpha, h);
 	cy = CyAlPas(mach, alpha, h);
-
-	cz = CyAlPas(mach, betta, h);
-	mzwz = MzOmegaZPas(mach, alpha, h);
-	double mywy = MzOmegaZPas(mach, betta, h);
+	double signVy = v.vect[1] / abs(v.vect[1]);
+	al1 = atan2(-signVy * sqrt(v.vect[1] * v.vect[1] + v.vect[2] * v.vect[2]), v.vect[0]);
+	al1 = (alpha < 0) ? 2 * PI + alpha : alpha;
+	fi1 = atan2(-v.vect[2], -v.vect[1]);
+	cz = CzBettaPas(mach, al1, fi1);
+	mzwz = MzOmegaZPas(mach, al1, h);
 	mzAl = MzAlphaPas(mach, alpha, h);
-	mzBet = -MzAlphaPas(mach, betta, h);
-	//TODO т€га, долгота в радиусе эллипса, пересчитывать азимут, долготу, широту
+	myBet = MyBettaPas(mach, al1, fi1);
+	mx = MxBettaPas(mach, al1, fi1);
 
-
-	double s = (abs(alpha) < 1E-7) ? 0 : alpha / abs(alpha);
-
-	ForcePr.vect[0] = (abs(alpha) < PI / 2) ? (-cx * density * vFullsq * S_M / 2) : (s * cx * density * vFullsq * S_M / 2);
+	ForcePr.vect[0] = -cx * density * vFullsq * S_M / 2;
 	ForcePr.vect[1] = cy * density * vFullsq * S_M / 2;
-	ForcePr.vect[2] = (abs(betta) > 0) ? (cz * density * vFullsq * S_M / 2) : (-cz * density * vFullsq * S_M / 2);
+	ForcePr.vect[2] = cz * density * vFullsq * S_M / 2;
 	Rot.fromRGtoMatrix();
 	Fg = Rot.A * ForcePr;
 
@@ -122,11 +127,12 @@ void distrFull::nonIntegr()
 
 	}
 	else {
+		double mywy = 0/*MzOmegaZPas(mach, betta, h)*/;
 		double d = (abs(betta) < 1E-7) ? 0 : betta / abs(betta);
-		Torque.vect[0] = (0 * parametr.vect[6] * L / vv) * density * vFullsq * S_M * L / 2 ;
-		Torque.vect[1] =  ((mywy * parametr.vect[7] * L / sqrt(vFullsq) + d * mzBet) * density * vFullsq * S_M * L / 2) ;
-		
-		Torque.vect[2] = ((mzwz * parametr.vect[8] * L / sqrt(vFullsq) + s * mzAl) * density * vFullsq * S_M * L / 2);
+		Torque.vect[0] = (mx)* density * vFullsq * S_M * L / 2 /*+ Mstab*/;
+		Torque.vect[1] = /*(abs(betta) <PI/2) ?*/ ((mywy * parametr.vect[7] * L / sqrt(vFullsq) + myBet) * density * vFullsq * S_M * L / 2) /*: ((0 * parametr[7] * L / vv - d * mzBet) * density * vFullsq * S_M * L / 2)*/;
+		//Torque[1] = 0;
+		Torque.vect[2] = /*(abs(alpha)<PI/2)?*/((mzwz * parametr.vect[8] * L / sqrt(vFullsq) + mzAl) * density * vFullsq * S_M * L / 2)/*:((mzwz * parametr[8] * L / vv - s * mzAl) * density * vFullsq * S_M * L / 2)*/;
 
 	}
 

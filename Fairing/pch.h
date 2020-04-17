@@ -16,7 +16,6 @@
 
 #include "RGParam.h"
 #include <random>
-
-// TODO: add headers that you want to pre-compile here
+#include <String>
 
 #endif //PCH_H

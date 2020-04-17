@@ -101,13 +101,13 @@ void Launch::nonIntegr()
 
 	
 	//double height = r - RA_EL * (1 - ALPHA_EL * sin(LAT)*sin(LAT));
-	cx = Cx(mach, alpha);
-	cy = CyAl(mach, alpha, h)*alpha;
+	//cx = Cx(mach, alpha);
+	//cy = CyAl(mach, alpha, h)*alpha;
 		
-	cz = CzBetta(mach, betta, h)*betta;
+	//cz = CzBetta(mach, betta, h)*betta;
 	double mzwz = MzOmegaZ(mach,alpha);
-	mzAl = MzAlpha(mach, alpha, h);
-	double mzBet = MzAlpha(mach, betta, h);
+	//mzAl = MzAlpha(mach, alpha, h);
+	//double mzBet = MzAlpha(mach, betta, h);
 	//TODO т€га, долгота в радиусе эллипса, пересчитывать азимут, долготу, широту
 	Vect<3> ForcePr;
 	ForcePr.vect[0] = P - pressure*S_A - cx * density * vFullsq * S_M / 2;
@@ -130,7 +130,7 @@ void Launch::nonIntegr()
 	}
 	else {
 		Torque.vect[0] = (0 * parametr.vect[6] * L / vv)* density * vFullsq * S_M * L / 2 /*+ Mstab*/;
-		Torque.vect[1] = (0 * parametr.vect[7] * L / vv + mzBet * betta) * density * vFullsq * S_M * L / 2;
+		//Torque.vect[1] = (0 * parametr.vect[7] * L / vv + mzBet * betta) * density * vFullsq * S_M * L / 2;
 		Torque.vect[1] = 0;
 		Torque.vect[2] = (mzwz * parametr.vect[8] * L / vv + mzAl * alpha) * density * vFullsq * S_M * L / 2;
 

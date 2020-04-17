@@ -14,19 +14,19 @@ const double ALPHA0 = 0;
 
 const double W_X0 = 0;
 const double W_Y0 = 0;
-const double W_Z0 = 0;
+const double W_Z0 = 1;
 
-const double I_X0 = 170;
-const double I_Y0 = 640;
-const double I_Z0 = 640;
+const double I_X0 = 6622;
+const double I_Y0 = 22753;
+const double I_Z0 = 18693;
 
 const double D_M = 0.95;
 const double L = 7;
 
-const double V0 = 1200; //модуль скорости
+//const double V0 = 1200; //модуль скорости
 
 
-const double H = 0.005;
+const double H = 0.00005;
 const double T_FIN = 10.0;
 const double EPS1 = 1E-6;
 
@@ -47,16 +47,16 @@ const double LAT = 45.966111*toRad;
 const double LON = 63.307778*toRad;
 const double AZIM = 61.3*toRad;
 
-const double M0 = 682985;
+const double M0 = 1400;
 
-const double PITCH0 = (90) * toRad; //тангаж в радианах
+const double PITCH0 = (20) * toRad; //тангаж в радианах
 const double ROLL0 = (0)*toRad; //угол крена в радианах
-const double YAW0 = (-0)*toRad; //угол рысканья в радианах
+const double YAW0 = (0)*toRad; //угол рысканья в радианах
 
-const double L1 = 21.87;
-const double L_CONE = 4.4;
-const double D_m = 2.1 * 2;
-
-
-const double L_FULL = 58;
-const double XD_FULL = 35.04;
+//const double L1 = 21.87;
+//const double L_CONE = 4.4;
+//const double D_m = 2.1 * 2;
+//
+//
+//const double L_FULL = 58;
+//const double XD_FULL = 35.04;

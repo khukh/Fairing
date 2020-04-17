@@ -31,7 +31,10 @@ status::status(std::vector <double> &coordinates) : Rot(coordinates[9], coordina
 
 	parametr.vect[13] = coordinates[12];
 	parametr.vect[14] = coordinates[13];
-
+	Ve = 0;
+	d1 = 0;
+	a1 = 0;
+	p1 = 0;
 	Ve = OMEGA_EARTH * RA_EL*(1 - ALPHA_EL * sin(lat) * sin(lat)) * cos(lat);
 	azimut = AZIM;
 
@@ -110,9 +113,7 @@ void status::printParam(std::ofstream &fout) {
 		fout << ForcePr.vect[i] << '\t';
 	}
 	fout << cx << '\t' << cy << '\t' << cz << '\t';
-	for (int i = 0; i < 3; i++) {
-		fout << Fg.vect[i] << '\t';
-	}
+	
 
 	for (int i = 0; i < 3; i++) {
 		fout << Torque.vect[i] << '\t';
@@ -120,9 +121,24 @@ void status::printParam(std::ofstream &fout) {
 	for (int i = 0; i < 3; i++) {
 		fout << v.vect[i] << '\t';
 	}
-	fout << mzBet << '\t';
+	fout << mzAl << '\t';
+	fout << mzwz << '\t';
+	fout << - g * parametr.vect[3] << '\t';
+	fout << - g * parametr.vect[4] << '\t';
+	fout << - g * parametr.vect[5] << '\t';
 
-
+	for (int i = 0; i < 3; i++) {
+		fout << Fg.vect[i] << '\t';
+	}
+	fout << Fg.vect[0]+g * parametr.vect[3] << '\t';
+	fout << Fg.vect[1]+g * parametr.vect[4] << '\t';
+	fout << Fg.vect[2]+g * parametr.vect[5] << '\t';
+	fout << myBet << '\t';
+	fout << mx << '\t';
+	fout << density << '\t' << d1 << '\t';
+	fout << pressure << '\t' << p1 << '\t';
+	fout << mach << '\t' << a1 << '\t';
+	fout << al1 << '\t' << fi1 << '\t';
 	fout << '\n';
 
 }
@@ -141,7 +157,7 @@ status& status::operator=(const status& right) {
 		return *this;
 	}
 	parametr = right.parametr;
-
+	nonIntegr();
 
 	Fg = right.Fg;
 	Torque = right.Torque;

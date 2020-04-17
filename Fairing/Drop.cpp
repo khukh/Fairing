@@ -31,7 +31,7 @@ Vect<15> Drop::rightPart()
 	prir.vect[12] = 0.5*(-parametr.vect[6] * parametr.vect[11] + parametr.vect[7] * parametr.vect[10] + parametr.vect[8] * parametr.vect[9]);
 	//dt/dt
 	prir.vect[13] = 1;
-	//prir[14] = -M_P;
+	prir.vect[14] = -M_P;
 	return prir;
 }
 
@@ -72,9 +72,12 @@ void Drop::nonIntegr()
 
 
 	h = r - RA_EL * (1 - ALPHA_EL * sin(lat)*sin(lat));
-
+	if ((parametr.vect[13] > 228)) {
+		double dfsd = 0;
+	}
 
 	Ve = OMEGA_EARTH * RA_EL*(1 - ALPHA_EL * sin(LAT) * sin(LAT)) * cos(LAT);
+	//Ve = 0;
 	//std::vector <double> v(3);
 	Vect<3> vg = { parametr.vect[0] - Ve * sin(azimut),parametr.vect[1],parametr.vect[2] - Ve * cos(azimut) };
 	Rot.fromRGtoMatrixT();
@@ -93,7 +96,7 @@ void Drop::nonIntegr()
 	betta = (vFullsq < 1E-7) ? 0 : atan2(v.vect[2], sqrt(v.vect[0] * v.vect[0] + v.vect[1] * v.vect[1]));
 	double alphaSpace = sqrt(alpha*alpha + betta * betta);
 	mach = vv / GOST4401.aFunc(h);
-
+	
 	q = density * vFullsq / 2;
 
 	//ForcePr(3);
@@ -102,19 +105,23 @@ void Drop::nonIntegr()
 	//double height = r - RA_EL * (1 - ALPHA_EL * sin(LAT)*sin(LAT));
 	cx = CxPas(mach, alpha, h);
 	cy = CyAlPas(mach, alpha, h);
-
-	cz = CyAlPas(mach, betta, h);
-	mzwz = MzOmegaZPas(mach, alpha, h);
+	double signVy = v.vect[1] / abs(v.vect[1]);
+	al1 = atan2(-signVy*sqrt(v.vect[1] * v.vect[1] + v.vect[2] * v.vect[2]), v.vect[0]);
+	al1 =	(alpha < 0) ? 2*PI+alpha : alpha;
+	fi1 = atan2(-v.vect[2], -v.vect[1]);
+	cz = CzBettaPas(mach, al1, fi1);
+	mzwz = MzOmegaZPas(mach, al1, h);
 	mzAl = MzAlphaPas(mach, alpha, h);
-	mzBet = -MzAlphaPas(mach, betta, h);
-	//TODO т€га, долгота в радиусе эллипса, пересчитывать азимут, долготу, широту
-
-
-	double s = (abs(alpha) < 1E-7) ? 0 : alpha / abs(alpha);
-
-	ForcePr.vect[0] = (abs(alpha)<PI/2)?(-cx * density * vFullsq * S_M / 2 ): (s * cx * density * vFullsq * S_M / 2);
+	myBet = MyBettaPas(mach, al1, fi1);
+	mx = MxBettaPas(mach, al1, fi1);
+	if (abs(cz)>3) {
+		double fjd = 0;
+	}
+	//double s = (abs(alpha) < 1E-7) ? 0 : alpha / abs(alpha);
+	//ForcePr.vect[0] = cx * density * vFullsq * S_M / 2;
+	ForcePr.vect[0] = -cx * density * vFullsq * S_M / 2;
 	ForcePr.vect[1] = cy * density * vFullsq * S_M / 2;
-	ForcePr.vect[2] = (abs(betta) > 0) ? (cz * density * vFullsq * S_M / 2):(-cz * density * vFullsq * S_M / 2);
+	ForcePr.vect[2] = cz * density * vFullsq * S_M / 2;
 	Rot.fromRGtoMatrix();
 	Fg = Rot.A * ForcePr;
 
@@ -131,14 +138,15 @@ void Drop::nonIntegr()
 
 	}
 	else {
-		double mywy = MzOmegaZPas(mach, betta, h);
+		double mywy = 0/*MzOmegaZPas(mach, betta, h)*/;
 		double d = (abs(betta) < 1E-7) ? 0 : betta / abs(betta);
-		Torque.vect[0] = (0 * parametr.vect[6] * L / vv) * density * vFullsq * S_M * L / 2 /*+ Mstab*/;
-		Torque.vect[1] = /*(abs(betta) <PI/2) ?*/ ((mywy * parametr.vect[7] * L / sqrt(vFullsq) + d * mzBet) * density * vFullsq * S_M * L / 2) /*: ((0 * parametr[7] * L / vv - d * mzBet) * density * vFullsq * S_M * L / 2)*/;
+		Torque.vect[0] = (mx) * density * vFullsq * S_M * L / 2 /*+ Mstab*/;
+		Torque.vect[1] = /*(abs(betta) <PI/2) ?*/ ((mywy * parametr.vect[7] * L / sqrt(vFullsq) + myBet) * density * vFullsq * S_M * L / 2) /*: ((0 * parametr[7] * L / vv - d * mzBet) * density * vFullsq * S_M * L / 2)*/;
 		//Torque[1] = 0;
-		Torque.vect[2] = /*(abs(alpha)<PI/2)?*/((mzwz * parametr.vect[8] * L / sqrt(vFullsq) + s * mzAl) * density * vFullsq * S_M * L / 2)/*:((mzwz * parametr[8] * L / vv - s * mzAl) * density * vFullsq * S_M * L / 2)*/;
+		Torque.vect[2] = /*(abs(alpha)<PI/2)?*/((mzwz * parametr.vect[8] * L / sqrt(vFullsq) + mzAl) * density * vFullsq * S_M * L / 2)/*:((mzwz * parametr[8] * L / vv - s * mzAl) * density * vFullsq * S_M * L / 2)*/;
 
 	}
+	
 
 }
 

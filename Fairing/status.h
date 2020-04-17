@@ -49,7 +49,7 @@ public:
 	void setParam(Vect<15> b);
 	Vect<15> getParam();
 
-
+	double mzwz;
 
 	status& operator=(const status& right);
 protected:
@@ -94,11 +94,11 @@ protected:
 
 	double azimut, lon, lat;
 	double Ve;
+	double fi1, al1;
+	double mzAl, h, cx, cy, cz, myBet, mx;
 
-	double mzAl, h, cx, cy, cz, mzBet;
 
-
-
+	double d1, a1, p1;
 
 };
 

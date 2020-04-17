@@ -10,10 +10,10 @@ public:
 	const double S = 110.4;
 	
 
-	double gPotHStand[9] = {-2.0E+3, 0.0, 11.0E+3, 20.0E+3, 32.0E+3, 47.0E+3, 51.0E+3, 71.0E+3, 85.0E+3};
+	double gPotHStand[12] = {-2.0E+3, 0.0, 11.0E+3, 20.0E+3, 32.0E+3, 47.0E+3, 51.0E+3, 71.0E+3, 85.0E+3, 94.0E+3, 102.45E+3, 117.777 };
 
-	double pGostStand[9];
-	double temperature[9];
+	double pGostStand[12];
+	double temperature[12];
 
 	Atmosphere();
 

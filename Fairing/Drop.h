@@ -6,7 +6,7 @@ class Drop :
 public:
 	Drop(std::vector <double> &coordinates);
 	Vect<15> rightPart();
-	double mzwz;
+	
 	double Wx, Wz;
 	virtual void nonIntegr();
 	~Drop();

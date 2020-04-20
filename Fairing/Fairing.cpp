@@ -11,19 +11,24 @@
 	void dropInteg(Drop &Rocket2, Drop &buf) {
 		double h1 = H;
 		int flag1 = 0;
-		while ((abs(Rocket2.getH()) > 1E-1) && (Rocket2.getParam().vect[13] < 1000)) {
+		while ((abs(Rocket2.getH()) > 1E-1) && (Rocket2.getParam().vect[13] < 1000)&&(flag==0)) {
 			if (Rocket2.getH() < 1E+3) {
 				buf = Rocket2;
 			}
 			if (flag1 == 0) {
-				h1 = H / pow(2, Rocket2.getParam().vect[8]);
-				if (h1 < 1E-8) {
-					h1 = 1E-8;
+				h1 = H / pow(2, abs(Rocket2.getParam().vect[8]));
+				if (h1 < 1E-7) {
+					h1 = 1E-7;
 				}
 			}
 			//h1 = H / pow(2, Rocket2.getParam().vect[8]);
 			//	traj2.push_back(Rocket2);
-			runge(Rocket2, h1);
+		//	try {
+				runge(Rocket2, h1);
+		/*	}
+			catch (int a) {
+				flag = 1;
+			}*/
 			if (Rocket2.getH() < 0) {
 				Rocket2 = buf;
 				h1 /= 2;
@@ -92,7 +97,7 @@
 			buf3.addErotation(LAT, AZIM);
 			buf3.nonIntegr();
 
-			std::string bfilename = "varStepRunge.txt";
+			std::string bfilename = "VarRunge5-6.txt";
 			std::ofstream fout2(bfilename);
 
 
@@ -100,8 +105,11 @@
 
 			int count = 0;
 			while (Rocket3.getH() > 0) {
-				h1 = H / pow(2, Rocket3.getParam().vect[8]);
-				if (count % 800 == 0/*(fabs(Rocket3.getParam().vect[13] * 1000 - round(Rocket3.getParam().vect[13] * 1000)) < EPS1)
+				h1 = H / pow(2, abs(Rocket3.getParam().vect[8]));
+				if (h1 < 1E-7) {
+					h1 = 1E-7;
+				}
+				if (count % 2000 == 0/*(fabs(Rocket3.getParam().vect[13] * 1000 - round(Rocket3.getParam().vect[13] * 1000)) < EPS1)
 					&& ((int)round(Rocket3.getParam().vect[13] * 1000) % 5 == 0)*/) {
 					Rocket3.printParam(fout2);
 
@@ -113,9 +121,9 @@
 					//buf = Rocket;
 				}
 			
-				if (count == 31600) {
+				/*if (count == 31600) {
 					double g = 0;
-				}
+				}*/
 				runge(Rocket3, h1);
 
 			}
@@ -153,7 +161,7 @@
 			double dPitch = PITCH0 * 0.05;
 			double rund = dis(gen);
 		//	#pragma loop(hint_parallel(8));
-			for (int i = 0; i < 100; i++) {
+			for (int i = 0; i < 0; i++) {
 				//std::string count = std::to_string(i);
 				//std::string filename = "res_varAtm" + std::to_string(1)+".txt";
 				//std::ofstream fout24(filename);

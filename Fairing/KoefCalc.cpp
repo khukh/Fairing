@@ -223,9 +223,6 @@ double CzBettaPas(double mach, double alpha, double betta) {
 		
 	}
 
-	if (abs(Cz) > 5) {
-		double fsdfs = 0;
-	}
 	return Cz;
 }
 ///////////////////////

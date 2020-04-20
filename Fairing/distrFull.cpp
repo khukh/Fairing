@@ -66,16 +66,17 @@ void distrFull::nonIntegr()
 
 	vFullsq = v.vect[0] * v.vect[0] + v.vect[1] * v.vect[1] + v.vect[2] * v.vect[2];
 	vv = sqrt(vFullsq);
-
-
+//	try {
+	//h = 1 / (3-3);
 	
 	density = GOST4401.roFunc(h);
 	d1 = density;
 	double dens1 = density*1E6;
 //	double qdfg = sqrt(0.05*dens1) / 3;
 	std::normal_distribution<> dDensity{ dens1, /*sqrt(*/0.05*dens1/3 };
-	density = dDensity(gen1)/1E6;
-	//density *= 1.05;
+
+	density = dDensity(gen1) / 1E6;
+	
 	pressure = GOST4401.pFunc(h);
 	std::normal_distribution<> dPressure{ pressure, /*sqrt(*/0.05*pressure/3 };
 	p1 = pressure;
@@ -100,7 +101,7 @@ void distrFull::nonIntegr()
 	cy = CyAlPas(mach, alpha, h);
 	double signVy = v.vect[1] / abs(v.vect[1]);
 	al1 = atan2(-signVy * sqrt(v.vect[1] * v.vect[1] + v.vect[2] * v.vect[2]), v.vect[0]);
-	al1 = (alpha < 0) ? 2 * PI + alpha : alpha;
+	al1 = (al1 < 0) ? 2 * PI + al1 : al1;
 	fi1 = atan2(-v.vect[2], -v.vect[1]);
 	cz = CzBettaPas(mach, al1, fi1);
 	mzwz = MzOmegaZPas(mach, al1, h);
@@ -108,9 +109,9 @@ void distrFull::nonIntegr()
 	myBet = MyBettaPas(mach, al1, fi1);
 	mx = MxBettaPas(mach, al1, fi1);
 
-	ForcePr.vect[0] = -cx * density * vFullsq * S_M / 2;
-	ForcePr.vect[1] = cy * density * vFullsq * S_M / 2;
-	ForcePr.vect[2] = cz * density * vFullsq * S_M / 2;
+	ForcePr.vect[0] = -cx * q * S_M;
+	ForcePr.vect[1] = cy * q * S_M;
+	ForcePr.vect[2] = cz * q * S_M;
 	Rot.fromRGtoMatrix();
 	Fg = Rot.A * ForcePr;
 
@@ -128,11 +129,11 @@ void distrFull::nonIntegr()
 	}
 	else {
 		double mywy = 0/*MzOmegaZPas(mach, betta, h)*/;
-		double d = (abs(betta) < 1E-7) ? 0 : betta / abs(betta);
-		Torque.vect[0] = (mx)* density * vFullsq * S_M * L / 2 /*+ Mstab*/;
-		Torque.vect[1] = /*(abs(betta) <PI/2) ?*/ ((mywy * parametr.vect[7] * L / sqrt(vFullsq) + myBet) * density * vFullsq * S_M * L / 2) /*: ((0 * parametr[7] * L / vv - d * mzBet) * density * vFullsq * S_M * L / 2)*/;
+	//	double d = (abs(betta) < 1E-7) ? 0 : betta / abs(betta);
+		Torque.vect[0] = (mx)* q * S_M * L /*+ Mstab*/;
+		Torque.vect[1] = /*(abs(betta) <PI/2) ?*/ ((mywy * parametr.vect[7] * L / vv + myBet) * q * S_M * L) /*: ((0 * parametr[7] * L / vv - d * mzBet) * density * vFullsq * S_M * L / 2)*/;
 		//Torque[1] = 0;
-		Torque.vect[2] = /*(abs(alpha)<PI/2)?*/((mzwz * parametr.vect[8] * L / sqrt(vFullsq) + mzAl) * density * vFullsq * S_M * L / 2)/*:((mzwz * parametr[8] * L / vv - s * mzAl) * density * vFullsq * S_M * L / 2)*/;
+		Torque.vect[2] = /*(abs(alpha)<PI/2)?*/((mzwz * parametr.vect[8] * L / vv + mzAl) * q * S_M * L)/*:((mzwz * parametr[8] * L / vv - s * mzAl) * density * vFullsq * S_M * L / 2)*/;
 
 	}
 

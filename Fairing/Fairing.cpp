@@ -97,11 +97,11 @@
 			buf3.addErotation(LAT, AZIM);
 			buf3.nonIntegr();
 
-			std::string bfilename = "newSmRunge5-5.txt";
+			std::string bfilename = "newSmRunge25-6.txt";
 			std::ofstream fout2(bfilename);
 
 
-			double h1 = H;
+			long double h1 = H;
 
 			int count = 0;
 			while (Rocket3.getH() > 0) {

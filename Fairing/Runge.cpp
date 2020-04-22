@@ -17,7 +17,7 @@ std::vector <double> multAndSum(std::vector<double> xi, std::vector<double> k, d
 	return(b);
 }
 
-void runge(status &sv, double h) {
+void runge(status &sv,long double h) {
 	Vect<15> xi;
 	xi = sv.getParam();
 	const int size = xi.size;

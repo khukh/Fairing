@@ -4,7 +4,7 @@ class Vect
 {
 public:
 
-	double vect[SIZE];
+	long double vect[SIZE];
 	int size = SIZE;
 
 	friend Vect<SIZE> operator + (const Vect<SIZE>& a, const Vect<SIZE>& b) {
@@ -38,10 +38,10 @@ public:
 
 
 		for (int i = 0; i < 3; i++) {
-			double r1 = 0;
+			long double r1 = 0;
 			for (int j = 0; j < 3; j++) {
-				double a = A.matr[i][j];
-				double r = b.vect[j];
+				long double a = A.matr[i][j];
+				long double r = b.vect[j];
 
 				r1 += a * r;
 

@@ -10,15 +10,15 @@ const double Y0 = 10000 - 150 * N;
 const double Z0 = 0;
 
 const double ALPHA0 = 0;
-
+const double M0 = 1400;
 
 const double W_X0 = 0;
 const double W_Y0 = 0;
 const double W_Z0 = 1;
 
-const double I_X0 = 6622;
-const double I_Y0 = 22753;
-const double I_Z0 = 18693;
+const double I_X0 = 96633 * M0 / 40816.77;
+const double I_Y0 = 364830 * M0 / 40816.77;
+const double I_Z0 = 364829 * M0 / 40816.77;
 
 const double D_M = 0.95;
 const double L = 7;
@@ -47,7 +47,7 @@ const double LAT = 45.966111*toRad;
 const double LON = 63.307778*toRad;
 const double AZIM = 61.3*toRad;
 
-const double M0 = 1400;
+
 
 const double PITCH0 = (20) * toRad; //тангаж в радианах
 const double ROLL0 = (0)*toRad; //угол крена в радианах

@@ -15,16 +15,16 @@
 			if (Rocket2.getH() < 1E+3) {
 				buf = Rocket2;
 			}
-			if (flag1 == 0) {
+			/*if (flag1 == 0) {
 				h1 = H / pow(2, abs(Rocket2.getParam().vect[8]));
 				if (h1 < 1E-7) {
 					h1 = 1E-7;
 				}
-			}
+			}*/
 			//h1 = H / pow(2, Rocket2.getParam().vect[8]);
 			//	traj2.push_back(Rocket2);
 		//	try {
-				runge(Rocket2, h1);
+				euler(Rocket2, h1);
 		/*	}
 			catch (int a) {
 				flag = 1;
@@ -84,12 +84,12 @@
 		Drop buf3(b);
 		Drop Rocket3(b);
 
-		//ПОМЕНЯТЬ НА ТОЧНЫЕ ЗНАЧЕНИЯ
+
 		double Ix1 = I_X0;
 		double Iy1 = I_Y0;
 		double Iz1 = I_Z0;
-		double Smm = 10.746/2;
-		double Ll = 9.38;
+		double Smm = 9.05;
+		double Ll = 11.4;
 			Rocket3.setStageParam(30000, 0, 0, Smm, 0, Ll, 0, Ix1, Iy1, Iz1);
 			Rocket3.addErotation(LAT, AZIM);
 			Rocket3.nonIntegr();
@@ -97,7 +97,7 @@
 			buf3.addErotation(LAT, AZIM);
 			buf3.nonIntegr();
 
-			std::string bfilename = "VarRunge5-6.txt";
+			std::string bfilename = "newSmRunge5-5.txt";
 			std::ofstream fout2(bfilename);
 
 
@@ -105,11 +105,11 @@
 
 			int count = 0;
 			while (Rocket3.getH() > 0) {
-				h1 = H / pow(2, abs(Rocket3.getParam().vect[8]));
+				h1 = H /*/ pow(2, abs(Rocket3.getParam().vect[8]))*/;
 				if (h1 < 1E-7) {
 					h1 = 1E-7;
 				}
-				if (count % 2000 == 0/*(fabs(Rocket3.getParam().vect[13] * 1000 - round(Rocket3.getParam().vect[13] * 1000)) < EPS1)
+				if (count % 20 == 0/*(fabs(Rocket3.getParam().vect[13] * 1000 - round(Rocket3.getParam().vect[13] * 1000)) < EPS1)
 					&& ((int)round(Rocket3.getParam().vect[13] * 1000) % 5 == 0)*/) {
 					Rocket3.printParam(fout2);
 

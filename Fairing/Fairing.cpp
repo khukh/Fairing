@@ -97,7 +97,7 @@
 			buf3.addErotation(LAT, AZIM);
 			buf3.nonIntegr();
 
-			std::string bfilename = "div2Runge1-5.txt";
+			std::string bfilename = "Runge5-5x64betta0.txt";
 			std::ofstream fout2(bfilename);
 
 
@@ -145,10 +145,10 @@
 			std::ofstream fout3(bfilename1);
 */
 
-			std::string bfilename3 = "d_paramVarStepVarAtm1.txt";
+			std::string bfilename3 = "d_paramStep5VarAtmx64betta0.txt";
 			std::ofstream fout3(bfilename3);
 
-			std::string bfilename4 = "res_dropVarStepVarAtm1.txt";
+			std::string bfilename4 = "res_dropStep5VarAtmx64betta0.txt";
 			std::ofstream fout4(bfilename4);
 			fout4 << '\t';
 			Rocket3.printParam(fout4);
@@ -160,8 +160,8 @@
 			double dWz = 1 * 0.05;
 			double dPitch = PITCH0 * 0.05;
 			double rund = dis(gen);
-		//	#pragma loop(hint_parallel(8));
-			for (int i = 0; i < 0; i++) {
+			//#pragma omp for
+			for (int i = 0; i < 100; i++) {
 				//std::string count = std::to_string(i);
 				//std::string filename = "res_varAtm" + std::to_string(1)+".txt";
 				//std::ofstream fout24(filename);

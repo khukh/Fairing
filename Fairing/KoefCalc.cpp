@@ -431,13 +431,13 @@ double MyBettaPas(double mach, double alpha, double betta) {
 	}
 	else {
 		if (bettaAbsDeg < 60) {
-			if (alpha * toDeg < 181.25) {
+			if (alphaDeg < 181.25) {
 				my1 = 1.177265E-3 + 2.0660087E-3*alphaDeg + 5.1360683E-5*alphaDeg2 - 1.99451668E-6*alphaDeg3 + 1.61694008413613E-8*alphaDeg4 - 3.90498782894E-11*alphaDeg5;
 			}
 			else {				
 					my1 = -6.59739187 + 0.13780116*alphaDeg - 1.151492833125E-3*alphaDeg2 + 4.801379052E-6*alphaDeg3 - 9.9470177003001E-9*alphaDeg4 + 8.15104025386042E-12*alphaDeg5;				
 			}
-			if (alpha * toDeg < 161.818) {
+			if (alphaDeg < 161.818) {
 				my2 = 1.293096395E-3 + 3.4148346676E-3*alphaDeg + 4.7291469E-5*alphaDeg2- 2.4200543938E-6*alphaDeg3 + 2.017695332E-8*alphaDeg4 - 4.85801728813182E-11*alphaDeg5;
 			}
 			else {				
@@ -448,7 +448,7 @@ double MyBettaPas(double mach, double alpha, double betta) {
 		}
 		else {
 			if (bettaAbsDeg < 90) {
-				if (alpha * toDeg < 161.818) {
+				if (alphaDeg < 161.818) {
 					my1 = 1.293096395E-3 + 3.4148346676E-3*alphaDeg + 4.7291469E-5*alphaDeg2 - 2.4200543938E-6*alphaDeg3 + 2.017695332E-8*alphaDeg4 - 4.85801728813182E-11*alphaDeg5;
 				}
 				else {
@@ -457,7 +457,7 @@ double MyBettaPas(double mach, double alpha, double betta) {
 				}
 
 
-				if (alpha * toDeg < 180.625) {
+				if (alphaDeg < 180.625) {
 					my2 = -4.1483153072E-3 + 5.32512481E-3*alphaDeg - 4.25749351E-5*alphaDeg2 - 1.0511163881E-6*alphaDeg3 + 1.2086021876E-8*alphaDeg4 - 3.24614262042153E-11*alphaDeg5;
 				}
 				else {
@@ -487,7 +487,7 @@ double MxBettaPas(double mach, double alpha, double betta) {
 	double alphaDeg2 = alphaDeg * alphaDeg;
 	double alphaDeg3 = alphaDeg2 * alphaDeg;
 	double alphaDeg4 = alphaDeg2 * alphaDeg2;
-	double alphaDeg5 = alphaDeg3 * alphaDeg2;
+	double alphaDeg5 = alphaDeg2 * alphaDeg3;
 	if (bettaAbsDeg < 30) {
 		mx1 = 0;
 		if (alpha * toDeg < 180) {
@@ -504,13 +504,13 @@ double MxBettaPas(double mach, double alpha, double betta) {
 	}
 	else {
 		if (bettaAbsDeg < 60) {
-			if (alpha * toDeg < 180) {
+			if (alphaDeg < 180) {
 				mx1 = -4.11595338E-3 + 4.322027523E-4*alphaDeg - 1.518620114E-4*alphaDeg2 + 2.3259526793E-6*alphaDeg3 - 1.2024717703E-8*alphaDeg4 + 2.06506966141321E-11*alphaDeg5;
 			}
 			else {
 				mx1 = 6.873320132 - 0.1249343665*alphaDeg + 8.830828935E-4*alphaDeg2 - 3.04725145156E-6*alphaDeg3 + 5.17817218653E-9*alphaDeg4 - 3.49735022619433E-12*alphaDeg5;
 			}
-			if (alpha * toDeg < 178.812) {
+			if (alphaDeg < 178.812) {
 				mx2 = -4.819184741E-3 + 3.720456549E-4*alphaDeg - 2.3052581254E-4*alphaDeg2 + 3.29557444863E-6*alphaDeg3 - 1.529297242E-8*alphaDeg4 + 2.24075890939032E-11*alphaDeg5;
 			}
 			else {
@@ -523,7 +523,7 @@ double MxBettaPas(double mach, double alpha, double betta) {
 		}
 		else {
 			if (bettaAbsDeg < 90) {
-				if (alpha * toDeg < 178.812) {
+				if (alphaDeg < 178.812) {
 					mx1 = -4.819184741E-3 + 3.720456549E-4*alphaDeg - 2.3052581254E-4*alphaDeg2 + 3.29557444863E-6*alphaDeg3 - 1.529297242E-8*alphaDeg4 + 2.24075890939032E-11*alphaDeg5;
 				}
 				else {
@@ -533,7 +533,7 @@ double MxBettaPas(double mach, double alpha, double betta) {
 				}
 
 
-				if (alpha * toDeg < 180) {
+				if (alphaDeg < 180) {
 					mx2 = -4.9800813517E-3 - 3.76518127E-4*alphaDeg - 1.862149644E-4*alphaDeg2 + 2.6486065044E-6*alphaDeg3 - 1.159565965E-8*alphaDeg4 + 1.493840398812913E-11*alphaDeg5;
 				}
 				else {

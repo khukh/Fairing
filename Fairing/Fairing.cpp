@@ -9,7 +9,7 @@
 #include "DistrFull.h"
 	int flag;
 	void dropInteg(Drop &Rocket2, Drop &buf) {
-		long double h1 = H;
+		double h1 = H;
 		int flag1 = 0;
 		while ((abs(Rocket2.getH()) > 1E-1) && (Rocket2.getParam().vect[13] < 1000)&&(flag==0)) {
 			if (Rocket2.getH() < 1E+3) {
@@ -24,7 +24,7 @@
 			//h1 = H / pow(2, Rocket2.getParam().vect[8]);
 			//	traj2.push_back(Rocket2);
 		//	try {
-				runge(Rocket2, h1);
+				euler(Rocket2, h1);
 		/*	}
 			catch (int a) {
 				flag = 1;
@@ -97,7 +97,7 @@
 			buf3.addErotation(LAT, AZIM);
 			buf3.nonIntegr();
 
-			std::string bfilename = "Runge2-5x64mach0Z.txt";
+			std::string bfilename = "newSmRunge25-6.txt";
 			std::ofstream fout2(bfilename);
 
 
@@ -105,11 +105,11 @@
 
 			int count = 0;
 			while (Rocket3.getH() > 0) {
-				h1 = H; /*/ pow(pow(10,0.2), abs(Rocket3.getParam().vect[8]));
+				h1 = H /*/ pow(2, abs(Rocket3.getParam().vect[8]))*/;
 				if (h1 < 1E-7) {
 					h1 = 1E-7;
-				}*/
-				if (count % 5000 == 0/*(fabs(Rocket3.getParam().vect[13] * 1000 - round(Rocket3.getParam().vect[13] * 1000)) < EPS1)
+				}
+				if (count % 20 == 0/*(fabs(Rocket3.getParam().vect[13] * 1000 - round(Rocket3.getParam().vect[13] * 1000)) < EPS1)
 					&& ((int)round(Rocket3.getParam().vect[13] * 1000) % 5 == 0)*/) {
 					Rocket3.printParam(fout2);
 
@@ -145,10 +145,10 @@
 			std::ofstream fout3(bfilename1);
 */
 
-			std::string bfilename3 = "d_paramStep2VarAtmx64mach0Z.txt";
+			std::string bfilename3 = "d_paramVarStepVarAtm.txt";
 			std::ofstream fout3(bfilename3);
 
-			std::string bfilename4 = "res_dropStep2VarAtmx64mach0Z.txt";
+			std::string bfilename4 = "res_dropVarStepVarAtm.txt";
 			std::ofstream fout4(bfilename4);
 			fout4 << '\t';
 			Rocket3.printParam(fout4);
@@ -160,8 +160,8 @@
 			double dWz = 1 * 0.05;
 			double dPitch = PITCH0 * 0.05;
 			double rund = dis(gen);
-			//#pragma omp for
-			for (int i = 0; i < 100; i++) {
+		//	#pragma loop(hint_parallel(8));
+			for (int i = 0; i < 0; i++) {
 				//std::string count = std::to_string(i);
 				//std::string filename = "res_varAtm" + std::to_string(1)+".txt";
 				//std::ofstream fout24(filename);
@@ -169,10 +169,9 @@
 				double dVz = /*dV * 0.5 * dis(gen)*/0;
 				double dVy = /*sqrt(dV*dV - dVz * dVz) * dis(gen)*/0;
 				double dVx = /*sqrt(dV*dV - dVz * dVz - dVy * dVy)*dis(gen)*/0;
-				double dWwz = 0;
-				//dWwz=dWz * dis(gen);
-				double dWwy = 0E-1 * dis(gen);
-				double dWwx = 0E-1 * dis(gen);
+				double dWwz = /*dWz * dis(gen)*/0;
+				double dWwy = 0/*1E-1 * dis(gen)*/;
+				double dWwx = 0/*1E-1 * dis(gen)*/;
 				double ddPitch = 0/*dPitch * dis(gen)*/;
 				double windX = 0 * dis(gen);
 				double windZ = sqrt(0 * 0 - windX * windX)/**dis(gen)*/;
@@ -219,8 +218,7 @@
 				b[1] -= dVy;
 				b[0] -= dVx;
 				b[8] -= dWwz;
-				b[6] -= dWwx;
-				b[7] -= dWwy;
+
 			
 			}
 		//for (int i = 0; i < 100; i++) {

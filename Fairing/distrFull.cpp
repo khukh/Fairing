@@ -84,7 +84,6 @@ void distrFull::nonIntegr()
 	//pressure *= 1.05;
 	double ah = atan2(-v.vect[1], v.vect[0]);
 	alpha = ah;
-	//betta = 0;
 	betta = (vFullsq < 1E-7) ? 0 : atan2(v.vect[2], sqrt(v.vect[0] * v.vect[0] + v.vect[1] * v.vect[1]));
 	double alphaSpace = sqrt(alpha*alpha + betta * betta);
 	double temperature = pressure / (287.05287*density);

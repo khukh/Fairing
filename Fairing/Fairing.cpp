@@ -97,7 +97,7 @@
 			buf3.addErotation(LAT, AZIM);
 			buf3.nonIntegr();
 
-			std::string bfilename = "Runge5-5x64betta0.txt";
+			std::string bfilename = "Runge2-5x64mach0Z.txt";
 			std::ofstream fout2(bfilename);
 
 
@@ -109,7 +109,7 @@
 				if (h1 < 1E-7) {
 					h1 = 1E-7;
 				}*/
-				if (count % 1000 == 0/*(fabs(Rocket3.getParam().vect[13] * 1000 - round(Rocket3.getParam().vect[13] * 1000)) < EPS1)
+				if (count % 5000 == 0/*(fabs(Rocket3.getParam().vect[13] * 1000 - round(Rocket3.getParam().vect[13] * 1000)) < EPS1)
 					&& ((int)round(Rocket3.getParam().vect[13] * 1000) % 5 == 0)*/) {
 					Rocket3.printParam(fout2);
 
@@ -145,10 +145,10 @@
 			std::ofstream fout3(bfilename1);
 */
 
-			std::string bfilename3 = "d_paramStep5VarAtmx64betta0.txt";
+			std::string bfilename3 = "d_paramStep2VarAtmx64mach0Z.txt";
 			std::ofstream fout3(bfilename3);
 
-			std::string bfilename4 = "res_dropStep5VarAtmx64betta0.txt";
+			std::string bfilename4 = "res_dropStep2VarAtmx64mach0Z.txt";
 			std::ofstream fout4(bfilename4);
 			fout4 << '\t';
 			Rocket3.printParam(fout4);

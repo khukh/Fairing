@@ -89,6 +89,7 @@ void Drop::nonIntegr()
 	double ah = atan2(-v.vect[1], v.vect[0]);
 	alpha = ah;
 	betta = (vFullsq < 1E-7) ? 0 : atan2(v.vect[2], sqrt(v.vect[0] * v.vect[0] + v.vect[1] * v.vect[1]));
+	//betta = 0;
 	double alphaSpace = sqrt(alpha*alpha + betta * betta);
 	
 

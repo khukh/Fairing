@@ -98,12 +98,15 @@ void Drop::nonIntegr()
 	al1 = (al1 < 0) ? 2 * PI + al1 : al1; //////
 	fi1 = atan2(-v.vect[2], -v.vect[1]);
 	
-	cx = CxPas(mach, alpha, h);
-	cy = CyAlPas(mach, alpha, h);	
+	//cx = CxPas(mach, alpha, h);
+	cx = CxModel8(mach, alpha, h);
+	//cy = CyAlPas(mach, alpha, h);	
+	cy = CyModel8(mach, alpha, h);
 	cz = CzBettaPas(mach, al1, fi1);
 
 	mzwz = MzOmegaZPas(mach, al1, h);
-	mzAl = MzAlphaPas(mach, alpha, h);
+	//mzAl = MzAlphaPas(mach, alpha, h);
+	mzAl = MzModel8(mach, alpha, h);
 	myBet = MyBettaPas(mach, al1, fi1);
 	mx = MxBettaPas(mach, al1, fi1);
 

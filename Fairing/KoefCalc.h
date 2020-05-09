@@ -18,7 +18,15 @@ double MxBettaPas(double mach, double alpha, double betta);
 
 /////////
 double MyOmegaY(double mach, double betta);
+////////
 
+double CxModel5(double mach, double alpha, double Hg);
+double CyModel5(double mach, double alpha, double Hg);
+double MzModel5(double mach, double alpha, double Hg);
+
+double CxModel8(double mach, double alpha, double Hg);
+double CyModel8(double mach, double alpha, double Hg);
+double MzModel8(double mach, double alpha, double Hg);
 
 
 

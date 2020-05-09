@@ -97,7 +97,7 @@
 			buf3.addErotation(LAT, AZIM);
 			buf3.nonIntegr();
 
-			std::string bfilename = "Runge2-5x64mach0Z.txt";
+			std::string bfilename = "Runge25-5x64_M8.txt";
 			std::ofstream fout2(bfilename);
 
 
@@ -145,10 +145,10 @@
 			std::ofstream fout3(bfilename1);
 */
 
-			std::string bfilename3 = "d_paramStep2VarAtmx64mach0Z.txt";
+			std::string bfilename3 = "d_paramStep25VaкAtmx64_M8.txt";
 			std::ofstream fout3(bfilename3);
 
-			std::string bfilename4 = "res_dropStep2VarAtmx64mach0Z.txt";
+			std::string bfilename4 = "res_dropStep25VarAtmx64_M8.txt";
 			std::ofstream fout4(bfilename4);
 			fout4 << '\t';
 			Rocket3.printParam(fout4);
@@ -170,7 +170,7 @@
 				double dVy = /*sqrt(dV*dV - dVz * dVz) * dis(gen)*/0;
 				double dVx = /*sqrt(dV*dV - dVz * dVz - dVy * dVy)*dis(gen)*/0;
 				double dWwz = 0;
-				//dWwz=dWz * dis(gen);
+			//	dWwz=dWz * dis(gen);
 				double dWwy = 0E-1 * dis(gen);
 				double dWwx = 0E-1 * dis(gen);
 				double ddPitch = 0/*dPitch * dis(gen)*/;
@@ -205,7 +205,7 @@
 				//static int i = 0;
 				//i++;
 				std::cout << i;
-				fout3 << i << '\t' << dVx << '\t' << dVy << '\t' << dVz << '\t' << ddPitch << '\t' << dWwz << '\t' << windX << '\t' << windZ << '\t' << '\t' << b[0] << '\t' << b[1] << '\t' << b[2] << '\t' << ddPitch << '\t' << dWwz << '\t' << windX << '\t' << windZ << '\n';
+				fout3 << i << '\t' << dVx << '\t' << dVy << '\t' << dVz << '\t' << ddPitch << '\t' << dWwz << '\t' << windX << '\t' << windZ << '\t' << '\t' << b[0] << '\t' << b[1] << '\t' << b[2] << '\t' << ddPitch << '\t' << dWwx << '\t' << dWwy << '\t' << dWwz << '\t' << windX << '\t' << windZ << '\n';
 				fout4 << i << '\t';
 				if (flag != 1) {
 					Rocket3.printParam(fout4);

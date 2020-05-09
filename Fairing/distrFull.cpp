@@ -98,15 +98,18 @@ void distrFull::nonIntegr()
 
 
 	//double height = r - RA_EL * (1 - ALPHA_EL * sin(LAT)*sin(LAT));
-	cx = CxPas(mach, alpha, h);
-	cy = CyAlPas(mach, alpha, h);
+	//cx = CxPas(mach, alpha, h);
+	cx = CxModel8(mach, alpha, h);
+	//cy = CyAlPas(mach, alpha, h);
+	cy = CyModel8(mach, alpha, h);
 	double signVy = v.vect[1] / abs(v.vect[1]);
 	al1 = atan2(-signVy * sqrt(v.vect[1] * v.vect[1] + v.vect[2] * v.vect[2]), v.vect[0]);
 	al1 = (al1 < 0) ? 2 * PI + al1 : al1;
 	fi1 = atan2(-v.vect[2], -v.vect[1]);
 	cz = CzBettaPas(mach, al1, fi1);
 	mzwz = MzOmegaZPas(mach, al1, h);
-	mzAl = MzAlphaPas(mach, alpha, h);
+	//mzAl = MzAlphaPas(mach, alpha, h);
+	mzAl = MzModel8(mach, alpha, h);
 	myBet = MyBettaPas(mach, al1, fi1);
 	mx = MxBettaPas(mach, al1, fi1);
 

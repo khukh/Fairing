@@ -94,28 +94,74 @@ void distrFull::nonIntegr()
 
 	q = density * vFullsq / 2;
 
-	//ForcePr(3);
 
 
-	//double height = r - RA_EL * (1 - ALPHA_EL * sin(LAT)*sin(LAT));
+	if (abs(v.vect[2])*abs(v.vect[1]) > 1E-7) {
+		double signVz = v.vect[2] / abs(v.vect[2]);
+		double signVy = v.vect[1] / abs(v.vect[1]);
+		double sss = signVz * signVy * sqrt(v.vect[1] * v.vect[1] + v.vect[2] * v.vect[2]);
+		al1 = -atan2(-signVz * sqrt(v.vect[1] * v.vect[1] + v.vect[2] * v.vect[2]), v.vect[0]);
+	}
+	else {
+		if (abs(v.vect[1]) < 1E-7) {
+			double signVz = v.vect[2] / abs(v.vect[2]);
+			al1 = -atan2(-signVz * sqrt(v.vect[1] * v.vect[1] + v.vect[2] * v.vect[2]), v.vect[0]);
+		}
+		if (abs(v.vect[2]) < 1E-7) {
+			double signVy = v.vect[1] / abs(v.vect[1]);
+			al1 = -atan2(signVy * sqrt(v.vect[1] * v.vect[1] + v.vect[2] * v.vect[2]), v.vect[0]);
+		}
+		if (abs(v.vect[1]) + abs(v.vect[2]) < 1E-7) {
+			if (v.vect[0] > 0) {
+				al1 = 0;
+			}
+			else {
+				al1 = PI;
+			}
+		}
+	}
+
+	al1 = (al1 < 0) ? 2 * PI + al1 : al1; //////
+	fi1 = -atan2(-v.vect[2], -v.vect[1]);
+
 	//cx = CxPas(mach, alpha, h);
-	cx = CxModel8(mach, alpha, h);
-	//cy = CyAlPas(mach, alpha, h);
-	cy = CyModel8(mach, alpha, h);
-	double signVy = v.vect[1] / abs(v.vect[1]);
-	al1 = atan2(-signVy * sqrt(v.vect[1] * v.vect[1] + v.vect[2] * v.vect[2]), v.vect[0]);
-	al1 = (al1 < 0) ? 2 * PI + al1 : al1;
-	fi1 = atan2(-v.vect[2], -v.vect[1]);
+	cx = -CxModel5(mach, alpha, h);
+	//double t = (abs(alpha) > 1E-3) ? alpha / abs(alpha) : alpha;
+	//cx = -1*t;
+	//cy = CyAlPas(mach, alpha, h);	
+	cy = CyModel5(mach, alpha, h);
+	/*cz = -0.9 * betta;
+	if (abs(betta) > 1E-3) {
+		cz = (PI / 2 - abs(betta) > 0) ? -0.9 * betta : -0.9*betta / abs(betta)*(PI - abs(betta));
+	}*/
+
+	//cy = 1 * alpha;
 	cz = CzBettaPas(mach, al1, fi1);
+
+
+	if (fi1 > 0) {
+		double ad = 0;
+	}
 	mzwz = MzOmegaZPas(mach, al1, h);
-	//mzAl = MzAlphaPas(mach, alpha, h);
-	mzAl = MzModel8(mach, alpha, h);
+	//	mzwz = 0;
+		//mzAl = MzAlphaPas(mach, alpha, h);
+	mzAl = MzModel5(mach, alpha, h);
+	//myBet = -0.1 * betta;
 	myBet = MyBettaPas(mach, al1, fi1);
 	mx = MxBettaPas(mach, al1, fi1);
-
-	ForcePr.vect[0] = -cx * q * S_M;
+	//parametr.vect[6] = 0;
+	//double s = (abs(alpha) < 1E-7) ? 0 : alpha / abs(alpha);
+	//ForcePr.vect[0] = cx * density * vFullsq * S_M / 2;
+	ForcePr.vect[0] = cx * q * S_M;
 	ForcePr.vect[1] = cy * q * S_M;
 	ForcePr.vect[2] = cz * q * S_M;
+
+	fromSvToA.fillMatrix(alpha, betta, 0);
+	Fa = fromSvToA * ForcePr;
+	//Fa = fromSvToA * v;
+	if (Fa.vect[0] > 0) {
+		double sf = 0;
+	}
 	Rot.fromRGtoMatrix();
 	Fg = Rot.A * ForcePr;
 
@@ -132,12 +178,14 @@ void distrFull::nonIntegr()
 
 	}
 	else {
-		double mywy = 0/*MzOmegaZPas(mach, betta, h)*/;
-	//	double d = (abs(betta) < 1E-7) ? 0 : betta / abs(betta);
-		Torque.vect[0] = (mx)* q * S_M * L /*+ Mstab*/;
+		double mywy = MzOmegaZPas(mach, al1, fi1);
+		//double d = (abs(betta) < 1E-7) ? 0 : betta / abs(betta);
+		double mxwx = MzOmegaZPas(mach, al1, fi1);
+		Torque.vect[0] = (mx + mxwx * parametr.vect[6] * 3.4 / vv) * q * S_M * 3.4 /*+ Mstab*/;
 		Torque.vect[1] = /*(abs(betta) <PI/2) ?*/ ((mywy * parametr.vect[7] * L / vv + myBet) * q * S_M * L) /*: ((0 * parametr[7] * L / vv - d * mzBet) * density * vFullsq * S_M * L / 2)*/;
 		//Torque[1] = 0;
 		Torque.vect[2] = /*(abs(alpha)<PI/2)?*/((mzwz * parametr.vect[8] * L / vv + mzAl) * q * S_M * L)/*:((mzwz * parametr[8] * L / vv - s * mzAl) * density * vFullsq * S_M * L / 2)*/;
+
 
 	}
 

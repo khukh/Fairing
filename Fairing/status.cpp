@@ -8,7 +8,7 @@
 #include <fstream>
 
 
-status::status(std::vector <double> &coordinates) : Rot(coordinates[9], coordinates[10], coordinates[11]) {
+status::status(std::vector <double> &coordinates) : Rot(coordinates[9], coordinates[10], coordinates[11]), fromSvToA(0,0,0) {
 
 	//скорости
 	parametr.vect[0] = coordinates[0];
@@ -65,7 +65,7 @@ double status::getV()
 {
 	return vv;
 }
-void status::setStageParam(double mDry, double mFuel, double mp, double sm, double sa, double l, double p, double ix, double iy, double iz) {
+void status::setStageParam(double mDry, double mFuel, double mp, double sm, double sa, double l, double p, double ix, double iy, double iz, double izy) {
 
 	M_DRY = mDry;
 	M_FUEL = mFuel;
@@ -79,6 +79,7 @@ void status::setStageParam(double mDry, double mFuel, double mp, double sm, doub
 	I_X = ix;
 	I_Y = iy;
 	I_Z = iz;
+	I_ZY = izy;
 }
 
 void status::addV(double Vx, double Vy, double Vz)
@@ -139,6 +140,13 @@ void status::printParam(std::ofstream &fout) {
 	fout << pressure << '\t' << p1 << '\t';
 	fout << mach << '\t' << a1 << '\t';
 	fout << al1 << '\t' << fi1 << '\t';
+
+	fout << Fa.vect[0] << '\t';
+	fout << Fa.vect[1] << '\t';
+	fout << Fa.vect[2] << '\t';
+	Vect<3> FaX = { Fa.vect[0], 0,0 };
+	Vect<3> d = FaX * v;
+	fout << d.vect[0]* d.vect[0]+ d.vect[1] * d.vect[1] + d.vect[2] * d.vect[2] << '\t';
 	fout << '\n';
 
 }
@@ -176,6 +184,7 @@ status& status::operator=(const status& right) {
 	I_X = right.I_X;
 	I_Y = right.I_Y;
 	I_Z = right.I_Z;
+	I_ZY = right.I_ZY;
 	S_M = right.S_M;
 	/////TODO: написать модули для определения параметров
 	g = right.g;

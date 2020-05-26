@@ -14,11 +14,13 @@ const double M0 = 1400;
 
 const double W_X0 = 0;
 const double W_Y0 = 0;
-const double W_Z0 = 1;
+const double W_Z0 = 0;
 
-const double I_X0 = 96633 * M0 / 40816.77;
-const double I_Y0 = 364830 * M0 / 40816.77;
-const double I_Z0 = 364829 * M0 / 40816.77;
+const double I_X0 = 59110.61 * M0 / 40816.77;
+const double I_Y0 = 327307.83 * M0 / 40816.77;
+const double I_Z0 = 364828.28 * M0 / 40816.77;
+const double I_XY0= 16389 * M0 / 40816.77;
+const double I_YX0 = 16389 * M0 / 40816.77;
 
 const double D_M = 0.95;
 const double L = 7;

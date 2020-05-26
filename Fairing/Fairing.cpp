@@ -11,6 +11,7 @@
 	void dropInteg(Drop &Rocket2, Drop &buf) {
 		long double h1 = H;
 		int flag1 = 0;
+		int flag = 0;
 		while ((abs(Rocket2.getH()) > 1E-1) && (Rocket2.getParam().vect[13] < 1000)&&(flag==0)) {
 			if (Rocket2.getH() < 1E+3) {
 				buf = Rocket2;
@@ -90,16 +91,16 @@
 		double Iz1 = I_Z0;
 		double Smm = 9.05;
 		double Ll = 11.4;
-			Rocket3.setStageParam(30000, 0, 0, Smm, 0, Ll, 0, Ix1, Iy1, Iz1);
+			Rocket3.setStageParam(30000, 0, 0, Smm, 0, Ll, 0, Ix1, Iy1, Iz1, I_XY0);
 			Rocket3.addErotation(LAT, AZIM);
 			Rocket3.nonIntegr();
-			buf3.setStageParam(30000, 0, 0, Smm, 0, Ll, 0, Ix1, Iy1, Iz1);
+			buf3.setStageParam(30000, 0, 0, Smm, 0, Ll, 0, Ix1, Iy1, Iz1, I_XY0);
 			buf3.addErotation(LAT, AZIM);
 			buf3.nonIntegr();
 
-			std::string bfilename = "Runge25-5x64_M8.txt";
+			std::string bfilename = "Runge25-5x64_M51constKoef11Wz0MzMach21mxwx1.txt";
 			std::ofstream fout2(bfilename);
-
+			bool flag = false;
 
 			long double h1 = H;
 
@@ -116,11 +117,14 @@
 				}
 				count++;
 			//	traj.push_back(Rocket3);
-				if (Rocket3.getH() < 1E+3) {
+				if (Rocket3.getH() < 2E+4) {
 					buf3 = Rocket3;
 					//buf = Rocket;
 				}
-			
+				/*if ((!flag) && (Rocket3.getParam().vect[13] > 140)) {
+					flag = true;
+					h1 /= 5000;
+			}*/
 				/*if (count == 31600) {
 					double g = 0;
 				}*/
@@ -145,10 +149,10 @@
 			std::ofstream fout3(bfilename1);
 */
 
-			std::string bfilename3 = "d_paramStep25VaкAtmx64_M8.txt";
+			std::string bfilename3 = "d_paramStep25VarAtmx64_M5_drop1constKoef11Wz0MzMach21.txt";
 			std::ofstream fout3(bfilename3);
 
-			std::string bfilename4 = "res_dropStep25VarAtmx64_M8.txt";
+			std::string bfilename4 = "res_dropStep25VarAtmx64_M5_drop1constKoef11Wz0MzMach21.txt";
 			std::ofstream fout4(bfilename4);
 			fout4 << '\t';
 			Rocket3.printParam(fout4);
@@ -161,16 +165,16 @@
 			double dPitch = PITCH0 * 0.05;
 			double rund = dis(gen);
 			//#pragma omp for
-			for (int i = 0; i < 100; i++) {
+			for (int i = 0; i < 0; i++) {
 				//std::string count = std::to_string(i);
 				//std::string filename = "res_varAtm" + std::to_string(1)+".txt";
 				//std::ofstream fout24(filename);
 				rund = dis(gen);
-				double dVz = /*dV * 0.5 * dis(gen)*/0;
-				double dVy = /*sqrt(dV*dV - dVz * dVz) * dis(gen)*/0;
-				double dVx = /*sqrt(dV*dV - dVz * dVz - dVy * dVy)*dis(gen)*/0;
+				double dVz = dV * 0.5 * dis(gen);
+				double dVy = sqrt(dV*dV - dVz * dVz) * dis(gen);
+				double dVx = sqrt(dV*dV - dVz * dVz - dVy * dVy)*dis(gen);
 				double dWwz = 0;
-			//	dWwz=dWz * dis(gen);
+				//dWwz=dWz * dis(gen);
 				double dWwy = 0E-1 * dis(gen);
 				double dWwx = 0E-1 * dis(gen);
 				double ddPitch = 0/*dPitch * dis(gen)*/;
@@ -186,16 +190,16 @@
 				b[6] += dWwx;
 				b[7] += dWwy;
 
-				/*Drop buf3(b);
-				Drop Rocket3(b);*/
-				distrFull buf3(b, windX, windZ);
-				distrFull Rocket3(b, windX, windZ);
+				Drop buf3(b);
+				Drop Rocket3(b);
+				//distrFull buf3(b, windX, windZ);
+				//distrFull Rocket3(b, windX, windZ);
 
-				Rocket3.setStageParam(30000, 0, 0, Smm, 0, Ll, 0, Ix1, Iy1, Iz1);
+				Rocket3.setStageParam(30000, 0, 0, Smm, 0, Ll, 0, Ix1, Iy1, Iz1, I_XY0);
 				Rocket3.addErotation(LON, AZIM);
 
 				Rocket3.nonIntegr();
-				buf3.setStageParam(30000, 0, 0, Smm, 0, Ll, 0, Ix1, Iy1, Iz1);
+				buf3.setStageParam(30000, 0, 0, Smm, 0, Ll, 0, Ix1, Iy1, Iz1, I_XY0);
 				buf3.addErotation(LON, AZIM);
 				buf3.nonIntegr();
 

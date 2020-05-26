@@ -464,17 +464,49 @@ double CxModel5(double mach, double alpha, double Hg)
 	double a5 = a4 * a1;
 	double a6 = a5 * a1;
 		if (alpha < 0) {			
-			cxNoMod2 = 0.365580708328933 + 0.597715976382403*a1 + 0.557140991020652*a2 + 2.52599088374278*a3 + 2.2059056136048*a4 + 0.729553688770536*a5 + 0.0855518761652196*a6;
-			cxMod2 = -(0.867991965540824 + 2.06659449121246*a1 - 0.515078099190406*a2 - 0.685172699073381*a3 - 0.118204670577509*a4);
+			//cxNoMod2 = 0.365580708328933 + 0.597715976382403*a1 + 0.557140991020652*a2 + 2.52599088374278*a3 + 2.2059056136048*a4 + 0.729553688770536*a5 + 0.0855518761652196*a6;
+			cxMod2 = (0.867991965540824 + 2.06659449121246*a1 - 0.515078099190406*a2 - 0.685172699073381*a3 - 0.118204670577509*a4);
 		}
 		else {
-			cxNoMod2 = 0.38349254408567 + 0.529713035341652*a1 + 1.2050290101389*a2 - 1.45954297097336*a3 + 0.466491292961852*a4 - 0.0486311373721188*a5;
-			cxMod2 = -(0.834571510452623 + 0.764862047837983*a1 - 0.120483693237789*a2 - 0.313304863237796*a3 + 0.0690238935156829*a4);
+			//cxNoMod2 = 0.38349254408567 + 0.529713035341652*a1 + 1.2050290101389*a2 - 1.45954297097336*a3 + 0.466491292961852*a4 - 0.0486311373721188*a5;
+			cxMod2 = (0.834571510452623 + 0.764862047837983*a1 - 0.120483693237789*a2 - 0.313304863237796*a3 + 0.0690238935156829*a4);
 		}
-		double k = (abs(cxMod2) > 1E-3) ? cxNoMod / cxMod2 : 2;
-		double cx = (abs(k) > 2) ? 2 * cxMod2 : k * cxMod2;
-		//double cx = cxNoMod * cxMod2 / cxNoMod2;
-		
+		//double k = (abs(cxMod2) > 1E-3) ? cxNoMod / cxMod2 : 2;
+		//double cx = (abs(k) > 2) ? 2 * cxMod2 : k * cxMod2;
+		double cx = 0;
+		if (mach < 0.8) {
+			double Cx1 = 0.5*1.038867*cxMod2;
+			double Cx2 = 1.038867*cxMod2;
+			cx = (Cx2*(mach - 0.0) + Cx1 * (0.8 - mach)) / (0.8 - 0.0);
+			//Cz = Cz2;
+		}
+		else {
+			if (mach < 1.2) {
+				double Cx1 = 1.038867*cxMod2;
+				double Cx2 = 1.3764*cxMod2;
+				cx = (Cx2*(mach - 0.8) + Cx1 * (1.2 - mach)) / (1.2 - 0.8);
+			}
+			else {
+				if (mach < 2.0) {
+					double Cx1 = 1.3764*cxMod2;
+					double Cx2 = 1*cxMod2;
+					cx = (Cx2*(mach - 1.2) + Cx1 * (2.0 - mach)) / (2.0 - 1.2);
+				}
+				else {
+					if (mach < 4.5) {
+						double Cx1 = 1.0*cxMod2;
+						double Cx2 = 0.899181*cxMod2;
+						cx = (Cx2*(mach - 2.0) + Cx1 * (4.5 - mach)) / (4.5 - 2.0);
+
+					}
+					else {
+						cx= 0.899181*cxMod2;
+					}
+
+				}
+			}
+		}
+		cx = cxMod2;
 	return cx;
 }
 
@@ -490,16 +522,49 @@ double CyModel5(double mach, double alpha, double Hg)
 	double a5 = a4 * a1;
 	double a6 = a5 * a1;
 	if (alpha < 0) {
-		cyNoMod2 = 0.740036659580577 + 5.76397325556497*a1 - 8.23184438631578*a2 - 9.35855376619993*a3 - 3.20462594417264*a4 - 0.389311584226631*a5;
+		//cyNoMod2 = 0.740036659580577 + 5.76397325556497*a1 - 8.23184438631578*a2 - 9.35855376619993*a3 - 3.20462594417264*a4 - 0.389311584226631*a5;
 		cyMod2 = -(-0.726519155970733 - 10.5516308248263*a1 - 2.66837005568588*a2 + 0.18462187927201*a3 + 0.0132927379145718*a4);
 	}
 	else {
-		cyNoMod2 = 0.441581999540912 + 2.46220116703884*a1 + 9.29525221217141*a2 - 10.70759758376*a3 + 4.55991812468966*a4 - 0.914541243489724*a5 + 0.0679474605594143*a6;
+		//cyNoMod2 = 0.441581999540912 + 2.46220116703884*a1 + 9.29525221217141*a2 - 10.70759758376*a3 + 4.55991812468966*a4 - 0.914541243489724*a5 + 0.0679474605594143*a6;
 		cyMod2 = -(-0.601745550772202 - 7.7572812656523*a1 + 2.69965775130698*a2);
 	}
-	double k = (abs(cyMod2)>1E-3)? cyNoMod / cyMod2: 2;
-	double cy = (abs(k)>2)? 2 * cyMod2 : k * cyMod2;
-	
+	//double k = (abs(cyMod2)>1E-3)? cyNoMod / cyMod2: 2;
+	//double cy = (abs(k)>2)? 2 * cyMod2 : k * cyMod2;
+	double cy = 0;
+	if (mach < 0.8) {
+		double Cy1 = 0.2*0.73614*cyMod2;
+		double Cy2 = 0.73614*cyMod2;
+		cy = (Cy2*(mach - 0.0) + Cy1 * (0.8 - mach)) / (0.8 - 0.0);
+		//Cz = Cz2;
+	}
+	else {
+		if (mach < 1.2) {
+			double Cy1 = 0.73614*cyMod2;
+			double Cy2 = 1.06379*cyMod2;
+			cy = (Cy2*(mach - 0.8) + Cy1 * (1.2 - mach)) / (1.2 - 0.8);
+		}
+		else {
+			if (mach < 2.0) {
+				double Cy1 = 1.06379*cyMod2;
+				double Cy2 = 1 * cyMod2;
+				cy = (Cy2*(mach - 1.2) + Cy1 * (2.0 - mach)) / (2.0 - 1.2);
+			}
+			else {
+				if (mach < 4.5) {
+					double Cy1 = 1.0*cyMod2;
+					double Cy2 = 0.73465*cyMod2;
+					cy = (Cy2*(mach - 2.0) + Cy1 * (4.5 - mach)) / (4.5 - 2.0);
+
+				}
+				else {
+					cy= 0.73465*cyMod2;
+				}
+
+			}
+		}
+	}
+	cy = cyMod2;
 	return cy;
 }
 
@@ -527,11 +592,50 @@ double MzModel5(double mach, double alpha, double Hg)
 	else {
 		mzMod2 = 0.404276892052999 + 0.166787858027403*a1 - 0.341444013885305*a2 - 0.0050931963029156*a3 + 0.0249608605231202*a4;
 	}
-	double k = (abs(mzMod2) > 1E-3) ? mzNoMod / mzMod2 : 1.5;
-	if (k < 0) { k = -k; }
-	double mz = (abs(k) > 1.5) ? 1.5 * mzMod2 : k * mzMod2;
+	//double k = 1;
+	//if (abs(mzNoMod2) > 1E-3) {
+	//	k = mzNoMod / mzNoMod2;
+	//}
+	//else {
+	//	k = (mzNoMod * mzNoMod2 > 0) ? 1.5:-1.5;
+	//}
+	//
+	//double mz = /*(abs(k) > 1.6) ? 1.5 *k/abs(k) * mzMod2 :*/ k * mzMod2;
 	//double mz = mzNoMod * mzMod2 / mzNoMod2;
-	
+	double mz = 0;
+	if (mach < 0.8) {
+		double mz1 = 0.2*0.899928*mzMod2;
+		double mz2 = 0.899928*mzMod2;
+		mz = (mz2*(mach - 0.0) + mz1 * (0.8 - mach)) / (0.8 - 0.0);
+		//Cz = Cz2;
+	}
+	else {
+		if (mach < 1.2) {
+			double mz1 = 0.899928*mzMod2;
+			double mz2 = 1.063922*mzMod2;
+			mz = (mz2*(mach - 0.8) + mz1 * (1.2 - mach)) / (1.2 - 0.8);
+		}
+		else {
+			if (mach < 2.0) {
+				double mz1 = 1.063922*mzMod2;
+				double mz2 = 1 * mzMod2;
+				mz = (mz2*(mach - 1.2) + mz1 * (2.0 - mach)) / (2.0 - 1.2);
+			}
+			else {
+				if (mach < 4.5) {
+					double mz1 = 1.0*mzMod2;
+					double mz2 = 0.842691*mzMod2;
+					mz = (mz2*(mach - 2.0) + mz1 * (4.5 - mach)) / (4.5 - 2.0);
+
+				}
+				else {
+					mz = 0.842691*mzMod2;
+				}
+
+			}
+		}
+	}
+	//double mz = mzMod2;
 	return mz;
 }
 
@@ -547,16 +651,51 @@ double CxModel8(double mach, double alpha, double Hg)
 	double a5 = a4 * a1;
 	double a6 = a5 * a1;
 	if (alpha < 0) {
-		cxNoMod2 = 0.365580708328933 + 0.597715976382403*a1 + 0.557140991020652*a2 + 2.52599088374278*a3 + 2.2059056136048*a4 + 0.729553688770536*a5 + 0.0855518761652196*a6;
+		//cxNoMod2 = 0.365580708328933 + 0.597715976382403*a1 + 0.557140991020652*a2 + 2.52599088374278*a3 + 2.2059056136048*a4 + 0.729553688770536*a5 + 0.0855518761652196*a6;
 		cxMod2 = 1.60083391041373 + 2.84327704113597*a1 - 0.745037275188489*a2 - 0.909576231555973*a3 - 0.157003027056968*a4;
 	}
 	else {
-		cxNoMod2 = 0.38349254408567 + 0.529713035341652*a1 + 1.2050290101389*a2 - 1.45954297097336*a3 + 0.466491292961852*a4 - 0.0486311373721188*a5;
+		//cxNoMod2 = 0.38349254408567 + 0.529713035341652*a1 + 1.2050290101389*a2 - 1.45954297097336*a3 + 0.466491292961852*a4 - 0.0486311373721188*a5;
 		cxMod2 = 1.55718119489783 + 0.929250741679049*a1 - 0.2507148706551*a2 - 0.52608418507473*a3 + 0.129129984418612*a4;
 	}
-	double k = (abs(cxMod2) > 1E-3) ? cxNoMod / cxMod2 : 2;
-	double cx = (abs(k) > 2) ? 2 * cxMod2 : k * cxMod2;
+
+
+	//double k = (abs(cxMod2) > 1E-3) ? cxNoMod / cxMod2 : 2;
+	//double cx = (abs(k) > 2) ? 2 * cxMod2 : k * cxMod2;
 	//double cx = cxNoMod * cxMod2 / cxNoMod2;
+	double cx = 0;
+	if (mach < 0.8) {
+		double Cx1 = 0.5*1.038867*cxMod2;
+		double Cx2 = 1.038867*cxMod2;
+		cx = (Cx2*(mach - 0.0) + Cx1 * (0.8 - mach)) / (0.8 - 0.0);
+		//Cz = Cz2;
+	}
+	else {
+		if (mach < 1.2) {
+			double Cx1 = 1.038867*cxMod2;
+			double Cx2 = 1.3764*cxMod2;
+			cx = (Cx2*(mach - 0.8) + Cx1 * (1.2 - mach)) / (1.2 - 0.8);
+		}
+		else {
+			if (mach < 2.0) {
+				double Cx1 = 1.3764*cxMod2;
+				double Cx2 = 1 * cxMod2;
+				cx = (Cx2*(mach - 1.2) + Cx1 * (2.0 - mach)) / (2.0 - 1.2);
+			}
+			else {
+				if (mach < 4.5) {
+					double Cx1 = 1.0*cxMod2;
+					double Cx2 = 0.899181*cxMod2;
+					cx = (Cx2*(mach - 2.0) + Cx1 * (4.5 - mach)) / (4.5 - 2.0);
+
+				}
+				else {
+					cx= 0.899181*cxMod2;
+				}
+
+			}
+		}
+	}
 
 	return cx;
 }
@@ -572,18 +711,50 @@ double CyModel8(double mach, double alpha, double Hg)
 	double a4 = a3 * a1;
 	double a5 = a4 * a1;
 	double a6 = a5 * a1;
-	if (alpha < 0) {
-		cyNoMod2 = 0.740036659580577 + 5.76397325556497*a1 - 8.23184438631578*a2 - 9.35855376619993*a3 - 3.20462594417264*a4 - 0.389311584226631*a5;
-	//	cyMod2 = -(-0.726519155970733 - 10.5516308248263*a1 - 2.66837005568588*a2 + 0.18462187927201*a3 + 0.0132927379145718*a4);
+	//if (alpha < 0) {
+	//	cyNoMod2 = 0.740036659580577 + 5.76397325556497*a1 - 8.23184438631578*a2 - 9.35855376619993*a3 - 3.20462594417264*a4 - 0.389311584226631*a5;
+	////	cyMod2 = -(-0.726519155970733 - 10.5516308248263*a1 - 2.66837005568588*a2 + 0.18462187927201*a3 + 0.0132927379145718*a4);
+	//}
+	//else {
+	//	cyNoMod2 = 0.441581999540912 + 2.46220116703884*a1 + 9.29525221217141*a2 - 10.70759758376*a3 + 4.55991812468966*a4 - 0.914541243489724*a5 + 0.0679474605594143*a6;
+	////	cyMod2 = -(-0.601745550772202 - 7.7572812656523*a1 + 2.69965775130698*a2);
+	//}
+	cyMod2 = -(-0.467668354611325 - 7.33812913442053*a1 + 0.678596882716044*a2 + 1.23824644824045*a3 - 0.0468748000871884*a4 - 0.0502748312806952*a5);
+	//double k = (abs(cyMod2) > 1E-3) ? cyNoMod / cyMod2 : 2;
+	//double cy = (abs(k) > 2) ? 2 * cyMod2 : k * cyMod2;
+	double cy = 0;
+	if (mach < 0.8) {
+		double Cy1 = 0.2*0.73614*cyMod2;
+		double Cy2 = 0.73614*cyMod2;
+		cy = (Cy2*(mach - 0.0) + Cy1 * (0.8 - mach)) / (0.8 - 0.0);
+		//Cz = Cz2;
 	}
 	else {
-		cyNoMod2 = 0.441581999540912 + 2.46220116703884*a1 + 9.29525221217141*a2 - 10.70759758376*a3 + 4.55991812468966*a4 - 0.914541243489724*a5 + 0.0679474605594143*a6;
-	//	cyMod2 = -(-0.601745550772202 - 7.7572812656523*a1 + 2.69965775130698*a2);
-	}
-	cyMod2 = -(-0.467668354611325 - 7.33812913442053*a1 + 0.678596882716044*a2 + 1.23824644824045*a3 - 0.0468748000871884*a4 - 0.0502748312806952*a5);
-	double k = (abs(cyMod2) > 1E-3) ? cyNoMod / cyMod2 : 2;
-	double cy = (abs(k) > 2) ? 2 * cyMod2 : k * cyMod2;
+		if (mach < 1.2) {
+			double Cy1 = 0.73614*cyMod2;
+			double Cy2 = 1.06379*cyMod2;
+			cy = (Cy2*(mach - 0.8) + Cy1 * (1.2 - mach)) / (1.2 - 0.8);
+		}
+		else {
+			if (mach < 2.0) {
+				double Cy1 = 1.06379*cyMod2;
+				double Cy2 = 1 * cyMod2;
+				cy = (Cy2*(mach - 1.2) + Cy1 * (2.0 - mach)) / (2.0 - 1.2);
+			}
+			else {
+				if (mach < 4.5) {
+					double Cy1 = 1.0*cyMod2;
+					double Cy2 = 0.73465*cyMod2;
+					cy = (Cy2*(mach - 2.0) + Cy1 * (4.5 - mach)) / (4.5 - 2.0);
 
+				}
+				else {
+					cy= 0.73465*cyMod2;
+				}
+
+			}
+		}
+	}
 	return cy;
 }
 
@@ -599,12 +770,12 @@ double MzModel8(double mach, double alpha, double Hg)
 	double a5 = a4 * a1;
 	double a6 = a5 * a1;
 	double a7 = a6 * a1;
-	if (alpha < 0) {
+	/*if (alpha < 0) {
 		mzNoMod2 = 0.133393433017781 + 0.189771162177409*a1 + 0.294054590699251*a2 + 3.8738660326121*a3 + 5.4457292732551*a4 + 2.93842597002652*a5 + 0.70726993592008*a6 + 0.0641323809569589*a7;
 	}
 	else {
 		mzNoMod2 = 0.146009887776836 + 0.452070060631612*a1 + 0.151952550632889*a2 - 0.83782786872091*a3 + 0.494552561082258*a4 - 0.116890177238211*a5 + 0.0108109220801909*a6;
-	}
+	}*/
 	if (alpha*toDeg < -30) {
 		mzMod2 = 0.891858901447927 - 0.132019770510859*a1 - 3.90302811806877*a2 - 4.03910285082207*a3 - 1.46895053774131*a4 - 0.179368830244217*a5;
 	}
@@ -612,10 +783,42 @@ double MzModel8(double mach, double alpha, double Hg)
 		mzMod2 = 0.51617679323505 + 0.043286804339664*a1 - 0.438616569182197*a2 + 0.112336744223521*a3;
 	}
 	double k = (abs(mzMod2) > 1E-3) ? mzNoMod / mzMod2 : 1.5;
-	if (k < 0) { k = -k; }
+	//if (k < 0) { k = -k; }
 	double mz = (abs(k) > 1.5) ? 1.5 * mzMod2 : k * mzMod2;
 	//double mz = mzNoMod * mzMod2 / mzNoMod2;
+	//double mz = 0;
+	//if (mach < 0.8) {
+	//	double mz1 = 0.2*0.899928*mzMod2;
+	//	double mz2 = 0.899928*mzMod2;
+	//	mz = (mz2*(mach - 0.0) + mz1 * (0.8 - mach)) / (0.8 - 0.0);
+	//	//Cz = Cz2;
+	//}
+	//else {
+	//	if (mach < 1.2) {
+	//		double mz1 = 0.899928*mzMod2;
+	//		double mz2 = 1.063922*mzMod2;
+	//		mz = (mz2*(mach - 0.8) + mz1 * (1.2 - mach)) / (1.2 - 0.8);
+	//	}
+	//	else {
+	//		if (mach < 2.0) {
+	//			double mz1 = 1.063922*mzMod2;
+	//			double mz2 = 1 * mzMod2;
+	//			mz = (mz2*(mach - 1.2) + mz1 * (2.0 - mach)) / (2.0 - 1.2);
+	//		}
+	//		else {
+	//			if (mach < 4.5) {
+	//				double mz1 = 1.0*mzMod2;
+	//				double mz2 = 0.842691*mzMod2;
+	//				mz = (mz2*(mach - 2.0) + mz1 * (4.5 - mach)) / (4.5 - 2.0);
 
+	//			}
+	//			else {
+	//				mz = 0.842691*mzMod2;
+	//			}
+
+	//		}
+	//	}
+	//}
 	return mz;
 }
 
@@ -689,8 +892,40 @@ double MyBettaPas(double mach, double alpha, double betta) {
 		}
 	}
 
+	double myy = my;
+	//if (mach < 0.8) {
+	//	double mz1 = 0.2*1.080978*my;
+	//	double mz2 = 1.080978*my;
+	//	myy = (mz2*(mach - 0.0) + mz1 * (0.8 - mach)) / (0.8 - 0.0);
+	//	//Cz = Cz2;
+	//}
+	//else {
+	//	if (mach < 1.2) {
+	//		double mz1 = 1.080978*my;
+	//		double mz2 = 1.105688*my;
+	//		myy = (mz2*(mach - 0.8) + mz1 * (1.2 - mach)) / (1.2 - 0.8);
+	//	}
+	//	else {
+	//		if (mach < 2.0) {
+	//			double mz1 = 1.105688*my;
+	//			double mz2 = 1.195868 * my;
+	//			myy = (mz2*(mach - 1.2) + mz1 * (2.0 - mach)) / (2.0 - 1.2);
+	//		}
+	//		else {
+	//			if (mach < 4.5) {
+	//				double mz1 = 1.195868*my;
+	//				double mz2 = my;
+	//				myy = (mz2*(mach - 2.0) + mz1 * (4.5 - mach)) / (4.5 - 2.0);
 
-	return my;
+	//			}
+	//			else {
+	//				myy = my;
+	//			}
+
+	//		}
+	//	}
+	//}
+	return myy;
 }
 
 double MxBettaPas(double mach, double alpha, double betta) {
@@ -765,7 +1000,39 @@ double MxBettaPas(double mach, double alpha, double betta) {
 			}
 		}
 	}
+	double mxx = mx;
+	//if (mach < 0.8) {
+	//	double mz1 = 0.2*1.080978*mx;
+	//	double mz2 = 1.080978*mx;
+	//	mxx = (mz2*(mach - 0.0) + mz1 * (0.8 - mach)) / (0.8 - 0.0);
+	//	//Cz = Cz2;
+	//}
+	//else {
+	//	if (mach < 1.2) {
+	//		double mz1 = 1.080978*mx;
+	//		double mz2 = 1.105688*mx;
+	//		mxx = (mz2*(mach - 0.8) + mz1 * (1.2 - mach)) / (1.2 - 0.8);
+	//	}
+	//	else {
+	//		if (mach < 2.0) {
+	//			double mz1 = 1.105688*mx;
+	//			double mz2 = 1.195868 * mx;
+	//			mxx = (mz2*(mach - 1.2) + mz1 * (2.0 - mach)) / (2.0 - 1.2);
+	//		}
+	//		else {
+	//			if (mach < 4.5) {
+	//				double mz1 = 1.195868*mx;
+	//				double mz2 = mx;
+	//				mxx = (mz2*(mach - 2.0) + mz1 * (4.5 - mach)) / (4.5 - 2.0);
 
+	//			}
+	//			else {
+	//				mxx = mx;
+	//			}
 
-	return mx;
+	//		}
+	//	}
+	//}
+
+	return mxx;
 }

@@ -16,7 +16,7 @@ public:
 	~status();
 	//methods
 	void addErotation(double lon, double azim);
-	void setStageParam(double mDry, double mFuel, double mp, double sm, double sa, double l, double p, double ix, double iy, double iz);
+	void setStageParam(double mDry, double mFuel, double mp, double sm, double sa, double l, double p, double ix, double iy, double iz, double izy);
 	virtual void nonIntegr();  //пересчет неинтегрируемых параметров
 	void addV(double Vx, double Vy, double vz);
 	void printParam(std::ofstream &fout);	//вывод параметров
@@ -53,6 +53,7 @@ protected:
 		*/
 
 	rotation Rot;
+	
 	double azimut, lon, lat;
 	double h;
 	double Ve;
@@ -72,7 +73,8 @@ protected:
 
 	Vect<3> ForcePr;
 	Vect<3> Fg; //проекция в-ра сил на старт СК
-
+	matrix fromSvToA;
+	Vect<3> Fa;
 	const double R_EARTH_G = (6371E3);
 	const double PI0 = (398600.4418E9);
 	double g;
@@ -82,7 +84,8 @@ protected:
 	double I_X;
 	double I_Y;
 	double I_Z;
-
+	double I_ZY;
+	//double I_Z;
 
 
 	double m;//масса

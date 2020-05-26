@@ -32,6 +32,13 @@ public:
 
 		return *this;
 	}
+	friend Vect<SIZE> operator * (const Vect<SIZE>& a, const Vect<SIZE>& b) {
+		Vect<SIZE> c;
+		for (int i = 0; i < SIZE; i++) {
+			c.vect[i] = a.vect[(i + 1) % 3] * b.vect[(i + 2) % 3] - b.vect[(i + 1) % 3] * a.vect[(i + 2) % 3];
+		}
+		return c;
+	}
 
 	friend Vect<SIZE> operator*(matrix &A, Vect<SIZE> &b) {
 		Vect<3> res;

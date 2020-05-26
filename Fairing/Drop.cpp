@@ -21,9 +21,23 @@ Vect<15> Drop::rightPart()
 	prir.vect[4] = parametr.vect[1];
 	prir.vect[5] = parametr.vect[2];
 	//dW/dt
-	prir.vect[6] = Torque.vect[0] / I_X - (I_Z - I_Y) / I_X * parametr.vect[7] * parametr.vect[8];//
-	prir.vect[7] = Torque.vect[1] / I_Y - (I_X - I_Z) / I_Y * parametr.vect[6] * parametr.vect[8];
-	prir.vect[8] = Torque.vect[2] / I_Z - (I_Y - I_X) / I_Z * parametr.vect[6] * parametr.vect[7];
+	
+	Vect<3> w = { parametr.vect[6],parametr.vect[7], parametr.vect[8] };
+	Vect<3> K = { I_X*parametr.vect[6], I_ZY*parametr.vect[8] + I_Y * parametr.vect[7], I_Z*parametr.vect[8] + I_ZY * parametr.vect[7] };
+	Vect<3> p = w * K;
+	double a = Torque.vect[0] - p.vect[0];
+	double b = Torque.vect[1] - p.vect[1];
+	double c = Torque.vect[2] - p.vect[2];
+
+	prir.vect[6] = a/I_X;
+	prir.vect[7] = (b*I_Z - c * I_ZY) / (I_Y*I_Z - I_ZY * I_ZY);
+	prir.vect[8] = (b*I_ZY - c * I_Y) / (I_ZY*I_ZY - I_Z * I_Y);
+	//prir.vect[6] = Torque.vect[0] / I_X - (I_Z - I_Y) / I_X * parametr.vect[7] * parametr.vect[8];//
+	//prir.vect[7] = Torque.vect[1] / I_Y - (I_X - I_Z) / I_Y * parametr.vect[6] * parametr.vect[8];
+	//prir.vect[8] = Torque.vect[2] / I_Z - (I_Y - I_X) / I_Z * parametr.vect[6] * parametr.vect[7];
+	if (prir.vect[6] * prir.vect[6] + prir.vect[7] * prir.vect[7] > 1E-7) {
+		double fgiuh = 0;
+	}
 	//dPRG/dt
 	prir.vect[9] = -0.5*(parametr.vect[6] * parametr.vect[10] + parametr.vect[7] * parametr.vect[11] + parametr.vect[8] * parametr.vect[12]);
 	prir.vect[10] = 0.5*(parametr.vect[6] * parametr.vect[9] - parametr.vect[7] * parametr.vect[12] + parametr.vect[8] * parametr.vect[11]);
@@ -81,41 +95,84 @@ void Drop::nonIntegr()
 
 	vFullsq = v.vect[0] * v.vect[0] + v.vect[1] * v.vect[1] + v.vect[2] * v.vect[2];
 	vv = sqrt(vFullsq);
-		
+	//v = { -1,0,1};
 	density = GOST4401.roFunc(h);
 	pressure = GOST4401.pFunc(h);
 	mach = vv / GOST4401.aFunc(h);
 	q = density * vFullsq / 2;
 	double ah = atan2(-v.vect[1], v.vect[0]);
 	alpha = ah;
-	betta = (vFullsq < 1E-7) ? 0 : atan2(v.vect[2], sqrt(v.vect[0] * v.vect[0] + v.vect[1] * v.vect[1]));
+	betta = (v.vect[2] < 1E-7) ? 0 : atan2(v.vect[2], sqrt(v.vect[0] * v.vect[0] + v.vect[1] * v.vect[1]));
 	//betta = 0;
 	double alphaSpace = sqrt(alpha*alpha + betta * betta);
 	
-
-	double signVy = v.vect[1] / abs(v.vect[1]);
-	al1 = atan2(-signVy * sqrt(v.vect[1] * v.vect[1] + v.vect[2] * v.vect[2]), v.vect[0]);
+	
+	if (abs(v.vect[2])*abs(v.vect[1]) > 1E-7) {
+		double signVz = v.vect[2] / abs(v.vect[2]);
+		double signVy = v.vect[1] / abs(v.vect[1]);
+		double sss = signVz * signVy * sqrt(v.vect[1] * v.vect[1] + v.vect[2] * v.vect[2]);
+		al1 = -atan2(-signVz * sqrt(v.vect[1] * v.vect[1] + v.vect[2] * v.vect[2]), v.vect[0]);
+	}
+	else {
+		if (abs(v.vect[1]) < 1E-7) {
+			double signVz = v.vect[2] / abs(v.vect[2]);
+			al1 = -atan2(-signVz * sqrt(v.vect[1] * v.vect[1] + v.vect[2] * v.vect[2]), v.vect[0]);
+		}
+		if (abs(v.vect[2]) < 1E-7) {
+			double signVy = v.vect[1] / abs(v.vect[1]);
+			al1 = -atan2(signVy * sqrt(v.vect[1] * v.vect[1] + v.vect[2] * v.vect[2]), v.vect[0]);
+		}
+		if (abs(v.vect[1]) + abs(v.vect[2]) < 1E-7) {
+			if (v.vect[0] > 0) {
+				al1 = 0;
+			}
+			else {
+				al1 = PI;
+			}
+		}
+	}
+	
 	al1 = (al1 < 0) ? 2 * PI + al1 : al1; //////
-	fi1 = atan2(-v.vect[2], -v.vect[1]);
+	fi1 = -atan2(-v.vect[2], -v.vect[1]);
 	
 	//cx = CxPas(mach, alpha, h);
-	cx = CxModel8(mach, alpha, h);
+	cx = -CxModel5(mach, alpha, h);
+	//double t = (abs(alpha) > 1E-3) ? alpha / abs(alpha) : alpha;
+	//cx = -1*t;
 	//cy = CyAlPas(mach, alpha, h);	
-	cy = CyModel8(mach, alpha, h);
+	cy = CyModel5(mach, alpha, h);
+	/*cz = -0.9 * betta;
+	if (abs(betta) > 1E-3) {
+		cz = (PI / 2 - abs(betta) > 0) ? -0.9 * betta : -0.9*betta / abs(betta)*(PI - abs(betta));
+	}*/
+	
+	//cy = 1 * alpha;
 	cz = CzBettaPas(mach, al1, fi1);
 
+	
+	if (fi1 > 0) {
+		double ad = 0;
+	}
 	mzwz = MzOmegaZPas(mach, al1, h);
+//	mzwz = 0;
 	//mzAl = MzAlphaPas(mach, alpha, h);
-	mzAl = MzModel8(mach, alpha, h);
+	mzAl = MzModel5(mach, alpha, h);
+	//myBet = -0.1 * betta;
 	myBet = MyBettaPas(mach, al1, fi1);
 	mx = MxBettaPas(mach, al1, fi1);
-
+	//parametr.vect[6] = 0;
 	//double s = (abs(alpha) < 1E-7) ? 0 : alpha / abs(alpha);
 	//ForcePr.vect[0] = cx * density * vFullsq * S_M / 2;
-	ForcePr.vect[0] = -cx * q * S_M;
+	ForcePr.vect[0] = cx * q * S_M;
 	ForcePr.vect[1] = cy * q * S_M;
 	ForcePr.vect[2] = cz * q * S_M;
 
+	fromSvToA.fillMatrix(alpha, betta, 0);
+	Fa = fromSvToA * ForcePr;
+	//Fa = fromSvToA * v;
+	if (Fa.vect[0] > 0) {
+		double sf = 0;
+	}
 	Rot.fromRGtoMatrix();
 	Fg = Rot.A * ForcePr;
 
@@ -132,9 +189,10 @@ void Drop::nonIntegr()
 
 	}
 	else {
-		double mywy = 0/*MzOmegaZPas(mach, betta, h)*/;
+		double mywy = MzOmegaZPas(mach, al1, fi1);
 		//double d = (abs(betta) < 1E-7) ? 0 : betta / abs(betta);
-		Torque.vect[0] = (mx) * q * S_M * L /*+ Mstab*/;
+		double mxwx = MzOmegaZPas(mach, al1, fi1);
+		Torque.vect[0] = (mx + mxwx * parametr.vect[6] * 3.4 / vv) * q * S_M * 3.4 /*+ Mstab*/;
 		Torque.vect[1] = /*(abs(betta) <PI/2) ?*/ ((mywy * parametr.vect[7] * L /vv + myBet) * q * S_M * L ) /*: ((0 * parametr[7] * L / vv - d * mzBet) * density * vFullsq * S_M * L / 2)*/;
 		//Torque[1] = 0;
 		Torque.vect[2] = /*(abs(alpha)<PI/2)?*/((mzwz * parametr.vect[8] * L / vv + mzAl) * q * S_M * L)/*:((mzwz * parametr[8] * L / vv - s * mzAl) * density * vFullsq * S_M * L / 2)*/;

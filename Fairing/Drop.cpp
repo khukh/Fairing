@@ -135,12 +135,12 @@ void Drop::nonIntegr()
 	al1 = (al1 < 0) ? 2 * PI + al1 : al1; //////
 	fi1 = -atan2(-v.vect[2], -v.vect[1]);
 	
-	//cx = CxPas(mach, alpha, h);
-	cx = -CxModel5(mach, alpha, h);
+	cx = -CxPas(mach, alpha, h);
+	//cx = -CxModel5(mach, alpha, h);
 	//double t = (abs(alpha) > 1E-3) ? alpha / abs(alpha) : alpha;
 	//cx = -1*t;
-	//cy = CyAlPas(mach, alpha, h);	
-	cy = CyModel5(mach, alpha, h);
+	cy = CyAlPas(mach, alpha, h);	
+	//cy = CyModel5(mach, alpha, h);
 	/*cz = -0.9 * betta;
 	if (abs(betta) > 1E-3) {
 		cz = (PI / 2 - abs(betta) > 0) ? -0.9 * betta : -0.9*betta / abs(betta)*(PI - abs(betta));
@@ -155,8 +155,11 @@ void Drop::nonIntegr()
 	}
 	mzwz = MzOmegaZPas(mach, al1, h);
 //	mzwz = 0;
-	//mzAl = MzAlphaPas(mach, alpha, h);
-	mzAl = MzModel5(mach, alpha, h);
+	mzAl = MzAlphaPas(mach, alpha, h);
+	//mzAl = MzModel5(mach, alpha, h);
+	if ((alpha < -1.79) && (mzAl > 0.3)) {
+		double asdf =0;
+	}
 	//myBet = -0.1 * betta;
 	myBet = MyBettaPas(mach, al1, fi1);
 	mx = MxBettaPas(mach, al1, fi1);
@@ -189,13 +192,22 @@ void Drop::nonIntegr()
 
 	}
 	else {
+		double d = 3.4;
+		double sfa = MrFr(mach, alpha);
+		mRoll = -(sfa*parametr.vect[6] + MrFp(mach, alpha)*parametr.vect[8] + MrFy(mach, alpha)*parametr.vect[7])*d / vv;
+		/*if (abs(sfa) > 1) {
+			double sf = 0;
+			double sfa = MrFr(mach, alpha);
+		}*/
+		mPitch = (-MpFr(mach, alpha)*parametr.vect[6] + MpFp(mach, alpha)*parametr.vect[8] + MpFy(mach, alpha)*parametr.vect[7])*d / 2/vv;
+		mYaw = (-MyFr(mach, alpha)*parametr.vect[6] + MyFp(mach, alpha)*parametr.vect[8] + MyFy(mach, alpha)*parametr.vect[7])*d / 2/vv;
 		double mywy = MzOmegaZPas(mach, al1, fi1);
 		//double d = (abs(betta) < 1E-7) ? 0 : betta / abs(betta);
 		double mxwx = MzOmegaZPas(mach, al1, fi1);
-		Torque.vect[0] = (mx + mxwx * parametr.vect[6] * 3.4 / vv) * q * S_M * 3.4 /*+ Mstab*/;
-		Torque.vect[1] = /*(abs(betta) <PI/2) ?*/ ((mywy * parametr.vect[7] * L /vv + myBet) * q * S_M * L ) /*: ((0 * parametr[7] * L / vv - d * mzBet) * density * vFullsq * S_M * L / 2)*/;
+		Torque.vect[0] = (mx + /*mxwx * parametr.vect[6] * 3.4 / vv*/mRoll) * q * S_M * 3.4 /*+ Mstab*/;
+		Torque.vect[1] = /*(abs(betta) <PI /2) ?*/ ((/*mywy * parametr.vect[7] * L /vv*/mYaw*d/L + myBet) * q * S_M * L ) /*: ((0 * parametr[7] * L / vv - d * mzBet) * density * vFullsq * S_M * L / 2)*/;
 		//Torque[1] = 0;
-		Torque.vect[2] = /*(abs(alpha)<PI/2)?*/((mzwz * parametr.vect[8] * L / vv + mzAl) * q * S_M * L)/*:((mzwz * parametr[8] * L / vv - s * mzAl) * density * vFullsq * S_M * L / 2)*/;
+		Torque.vect[2] = /*(abs(alpha)<PI/2)?*/((/*mzwz * parametr.vect[8] * L / vv*/mPitch*d/L + mzAl) * q * S_M * L)/*:((mzwz * parametr[8] * L / vv - s * mzAl) * density * vFullsq * S_M * L / 2)*/;
 
 	}
 	

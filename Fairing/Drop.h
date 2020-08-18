@@ -1,5 +1,6 @@
 #pragma once
 #include "status.h"
+#include "Koef.h"
 class Drop :
 	public status
 {

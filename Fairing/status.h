@@ -91,7 +91,10 @@ protected:
 	double m;//масса
 
 
-	
+	double mRoll;
+	double mYaw;
+	double mPitch;
+
 
 
 	double P;

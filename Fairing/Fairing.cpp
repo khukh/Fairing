@@ -7,7 +7,8 @@
 #include "Launch.h"
 #include "Drop.h"
 #include "DistrFull.h"
-	int flag;
+#include <omp.h>
+	//int flag;
 	void dropInteg(Drop &Rocket2, Drop &buf) {
 		long double h1 = H;
 		int flag1 = 0;
@@ -36,9 +37,9 @@
 				flag1 = 1;
 			}
 		}
-		if (Rocket2.getParam().vect[13] > 1000) {
+		/*if (Rocket2.getParam().vect[13] > 1000) {
 			flag = 1;
-		}
+		}*/
 	}
 
 	void dropInteg(Drop &Rocket2, Drop &buf, std::ofstream &fout) {
@@ -64,9 +65,9 @@
 			}
 		}
 		Rocket2.printParam(fout);
-		if (Rocket2.getParam().vect[13] > 1000) {
+		/*if (Rocket2.getParam().vect[13] > 1000) {
 			flag = 1;
-		}
+		}*/
 		
 	}
 
@@ -84,6 +85,7 @@
 		
 		Drop buf3(b);
 		Drop Rocket3(b);
+		
 
 
 		double Ix1 = I_X0;
@@ -98,7 +100,9 @@
 			buf3.addErotation(LAT, AZIM);
 			buf3.nonIntegr();
 
-			std::string bfilename = "Runge25-5x64_M51constKoef11Wz0MzMach21mxwx1.txt";
+			
+
+			std::string bfilename = "M.txt";
 			std::ofstream fout2(bfilename);
 			bool flag = false;
 
@@ -129,6 +133,7 @@
 					double g = 0;
 				}*/
 				runge(Rocket3, h1);
+				
 
 			}
 			Rocket3 = buf3;
@@ -149,10 +154,10 @@
 			std::ofstream fout3(bfilename1);
 */
 
-			std::string bfilename3 = "d_paramStep25VarAtmx64_M5_drop1constKoef11Wz0MzMach21.txt";
+			std::string bfilename3 = "d_paramStep25VarAtmx64_NoMod_VarW.txt";
 			std::ofstream fout3(bfilename3);
 
-			std::string bfilename4 = "res_dropStep25VarAtmx64_M5_drop1constKoef11Wz0MzMach21.txt";
+			std::string bfilename4 = "res_dropStep25VarAtmx64_NoMod_VarW.txt";
 			std::ofstream fout4(bfilename4);
 			fout4 << '\t';
 			Rocket3.printParam(fout4);
@@ -164,69 +169,79 @@
 			double dWz = 1 * 0.05;
 			double dPitch = PITCH0 * 0.05;
 			double rund = dis(gen);
-			//#pragma omp for
+			#pragma omp parallel for private(b) num_threads(7)
 			for (int i = 0; i < 0; i++) {
 				//std::string count = std::to_string(i);
 				//std::string filename = "res_varAtm" + std::to_string(1)+".txt";
 				//std::ofstream fout24(filename);
-				rund = dis(gen);
-				double dVz = dV * 0.5 * dis(gen);
-				double dVy = sqrt(dV*dV - dVz * dVz) * dis(gen);
-				double dVx = sqrt(dV*dV - dVz * dVz - dVy * dVy)*dis(gen);
-				double dWwz = 0;
-				//dWwz=dWz * dis(gen);
-				double dWwy = 0E-1 * dis(gen);
-				double dWwx = 0E-1 * dis(gen);
-				double ddPitch = 0/*dPitch * dis(gen)*/;
-				double windX = 0 * dis(gen);
-				double windZ = sqrt(0 * 0 - windX * windX)/**dis(gen)*/;
+				double n = omp_get_thread_num();				
+				double dVx, dVy, dVz, dWwx, dWwy, dWwz, ddPitch, windX, windZ;				
+				#pragma omp critical
+				{				
+					rund = dis(gen);
+					dVz = /*dV * 0.5 * dis(gen)*/0;
+					dVy = /*sqrt(dV*dV - dVz * dVz) * dis(gen)*/0;
+					dVx = /*sqrt(dV*dV - dVz * dVz - dVy * dVy)*dis(gen)*/0;
+					
+					dWwz = 0;
+					dWwz=dWz * dis(gen);
+					dWwy = 1E-1 * dis(gen);
+					dWwx = 1E-1 * dis(gen);
+					ddPitch = 0/*dPitch * dis(gen)*/;
+					windX = 0 * dis(gen);
+					windZ = sqrt(0 * 0 - windX * windX)/**dis(gen)*/;
 
+					//f[9] = 1 + ddPitch;
+					/*f[2] = b[2] + dVz;
+					f[1] = b[1] + dVy;
+					f[0] = b[0] + dVx;
+					f[8] = b[8] + dWwz;
+					f[6] = b[6] + dWwx;
+					f[7] = b[7] + dWwy;*/
+					b = { V1 + dVx,V2 + dVy,V3 + dVz,/**/0,r + 80E+3,0,/**/0 + dWwx,0 + dWwy,-1 + dWwz,/**/PITCH0 + ddPitch, YAW0, ROLL0,0,M0 };
+					//std::cout << b[0] << '\t' << i << '\n';
+				}
 
-				b[9] += ddPitch;
-				b[2] += dVz;
-				b[1] += dVy;
-				b[0] += dVx;
-				b[8] += dWwz;
-				b[6] += dWwx;
-				b[7] += dWwy;
 
 				Drop buf3(b);
 				Drop Rocket3(b);
 				//distrFull buf3(b, windX, windZ);
 				//distrFull Rocket3(b, windX, windZ);
-
 				Rocket3.setStageParam(30000, 0, 0, Smm, 0, Ll, 0, Ix1, Iy1, Iz1, I_XY0);
-				Rocket3.addErotation(LON, AZIM);
-
+				Rocket3.addErotation(LAT, AZIM);
 				Rocket3.nonIntegr();
 				buf3.setStageParam(30000, 0, 0, Smm, 0, Ll, 0, Ix1, Iy1, Iz1, I_XY0);
-				buf3.addErotation(LON, AZIM);
+				buf3.addErotation(LAT, AZIM);
 				buf3.nonIntegr();
-
-
-
 				dropInteg(Rocket3, buf3);
-				//static int i = 0;
-				//i++;
-				std::cout << i;
-				fout3 << i << '\t' << dVx << '\t' << dVy << '\t' << dVz << '\t' << ddPitch << '\t' << dWwz << '\t' << windX << '\t' << windZ << '\t' << '\t' << b[0] << '\t' << b[1] << '\t' << b[2] << '\t' << ddPitch << '\t' << dWwx << '\t' << dWwy << '\t' << dWwz << '\t' << windX << '\t' << windZ << '\n';
+#pragma omp critical
+				{				
+					std::cout << i << '\t' << i << '\n';
+					fout3 << i << '\t' << dVx << '\t' << dVy << '\t' << dVz << '\t' << ddPitch << '\t' << dWwz << '\t' << windX << '\t' << windZ << '\t' << '\t' << b[0] << '\t' << b[1] << '\t' << b[2] << '\t' << ddPitch << '\t' << dWwx << '\t' << dWwy << '\t' << dWwz << '\t' << windX << '\t' << windZ << '\n';
 				fout4 << i << '\t';
-				if (flag != 1) {
+				if (Rocket3.getParam().vect[13] < 999) {
 					Rocket3.printParam(fout4);
 				}
 				else {
 					fout4 << i << '\n';
-					flag = 0;
+					//flag = 0;
 				}
-				b[9] -= ddPitch;
-				b[2] -= dVz;
-				b[1] -= dVy;
-				b[0] -= dVx;
-				b[8] -= dWwz;
-				b[6] -= dWwx;
-				b[7] -= dWwy;
+					
+				}
+				////static int i = 0;
+				////i++;
+				
+				
+				//b[9] -= ddPitch;
+				//b[2] -= dVz;
+				//b[1] -= dVy;
+				//b[0] -= dVx;
+				//b[8] -= dWwz;
+				//b[6] -= dWwx;
+				//b[7] -= dWwy;
 			
 			}
+		//	std::cout << b[0];
 		//for (int i = 0; i < 100; i++) {
 		//	fout3 << 4.5*i/100 << '\t';
 		//	fout3 << CxPas(4.5*i/100, 60*toRad, 5) << '\t';

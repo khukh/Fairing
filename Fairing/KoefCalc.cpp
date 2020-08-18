@@ -334,6 +334,9 @@ double MzOmegaZPas(double mach, double alpha, double Hg) {
 	double Mz_wz = 0;
 	double M = mach;
 	double alphaDeg = alpha * toDeg;
+	if (alpha < 0) {
+		double hjk = 0;
+	}
 	
 	if (alphaDeg < 160) {
 		Mz_wz = -1.297788E-8 * alphaDeg * alphaDeg * alphaDeg + 3.722716E-5 * alphaDeg * alphaDeg - 0.00580598 *alphaDeg - 0.0191;
@@ -431,7 +434,7 @@ double MzAlphaPas(double mach, double alpha, double Hg) {
 					mz = (mz2*(mach - 2.0) + mz1 * (4.5 - mach)) / (4.5 - 2.0);
 				} else {
 					if (alpha < 0) {
-						mz = 0.107346213765651 + 0.458250461406157*a1 + 1.55000415146429*a2 + 3.74337646269654*a3 + 3.46977770226172*a4 + 1.38534982386379*a5 + 0.235344911650548*a6 + 0.012506244693478*a7;
+						mz = 0.24540432424713 + 12.9227871539163*a3 + 1.03643908814433*a6 + 0.0866502794430501*a7 + 2.05732867518683*a1 + 4.8553267350211*a5 + 11.1550548406949*a4 + 7.24854378358479*a2;
 					}
 					else {
 						mz = 0.11842066129015 + 0.457582935321605*a1 - 0.273059225480615*a2 - 0.109033887276009*a3 - 0.0103977310363484*a4 + 0.0490413170058151*a5 - 0.00972577829860893*a6;
@@ -506,7 +509,7 @@ double CxModel5(double mach, double alpha, double Hg)
 				}
 			}
 		}
-		cx = cxMod2;
+		//cx = cxMod2;
 	return cx;
 }
 
@@ -564,7 +567,7 @@ double CyModel5(double mach, double alpha, double Hg)
 			}
 		}
 	}
-	cy = cyMod2;
+	//cy = cyMod2;
 	return cy;
 }
 
@@ -696,7 +699,7 @@ double CxModel8(double mach, double alpha, double Hg)
 			}
 		}
 	}
-
+	
 	return cx;
 }
 

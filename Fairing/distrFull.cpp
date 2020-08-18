@@ -85,10 +85,11 @@ void distrFull::nonIntegr()
 	double ah = atan2(-v.vect[1], v.vect[0]);
 	alpha = ah;
 	//betta = 0;
-	betta = (vFullsq < 1E-7) ? 0 : atan2(v.vect[2], sqrt(v.vect[0] * v.vect[0] + v.vect[1] * v.vect[1]));
+	betta = (v.vect[2] < 1E-7) ? 0 : atan2(v.vect[2], sqrt(v.vect[0] * v.vect[0] + v.vect[1] * v.vect[1]));
 	double alphaSpace = sqrt(alpha*alpha + betta * betta);
 	double temperature = pressure / (287.05287*density);
 	double aSonic = 20.046796*sqrt(temperature);
+	//double aSonic = GOST4401.aFunc(h);
 	//a1 = vv/ GOST4401.aFunc(h);
 	mach = vv / aSonic;
 
@@ -124,12 +125,12 @@ void distrFull::nonIntegr()
 	al1 = (al1 < 0) ? 2 * PI + al1 : al1; //////
 	fi1 = -atan2(-v.vect[2], -v.vect[1]);
 
-	//cx = CxPas(mach, alpha, h);
-	cx = -CxModel5(mach, alpha, h);
+	cx = -CxPas(mach, alpha, h);
+	//cx = -CxModel5(mach, alpha, h);
 	//double t = (abs(alpha) > 1E-3) ? alpha / abs(alpha) : alpha;
 	//cx = -1*t;
-	//cy = CyAlPas(mach, alpha, h);	
-	cy = CyModel5(mach, alpha, h);
+	cy = CyAlPas(mach, alpha, h);	
+	//cy = CyModel5(mach, alpha, h);
 	/*cz = -0.9 * betta;
 	if (abs(betta) > 1E-3) {
 		cz = (PI / 2 - abs(betta) > 0) ? -0.9 * betta : -0.9*betta / abs(betta)*(PI - abs(betta));
@@ -144,8 +145,8 @@ void distrFull::nonIntegr()
 	}
 	mzwz = MzOmegaZPas(mach, al1, h);
 	//	mzwz = 0;
-		//mzAl = MzAlphaPas(mach, alpha, h);
-	mzAl = MzModel5(mach, alpha, h);
+		mzAl = MzAlphaPas(mach, alpha, h);
+	//mzAl = MzModel5(mach, alpha, h);
 	//myBet = -0.1 * betta;
 	myBet = MyBettaPas(mach, al1, fi1);
 	mx = MxBettaPas(mach, al1, fi1);

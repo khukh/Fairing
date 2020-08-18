@@ -8,7 +8,7 @@
 #include <fstream>
 
 
-status::status(std::vector <double> &coordinates) : Rot(coordinates[9], coordinates[10], coordinates[11]), fromSvToA(0,0,0) {
+status::status(std::vector <double> &coordinates) : Rot(coordinates[9], coordinates[10], coordinates[11]), fromSvToA(0,0,0), GOST4401() {
 
 	//скорости
 	parametr.vect[0] = coordinates[0];
@@ -147,8 +147,14 @@ void status::printParam(std::ofstream &fout) {
 	Vect<3> FaX = { Fa.vect[0], 0,0 };
 	Vect<3> d = FaX * v;
 	fout << d.vect[0]* d.vect[0]+ d.vect[1] * d.vect[1] + d.vect[2] * d.vect[2] << '\t';
-	fout << '\n';
+	double a360 = (alpha < 0) ? 2 * PI + alpha : alpha;
+	fout << a360*toDeg << '\t';
+	
+	fout << mRoll << '\t';
+	fout << mPitch << '\t';
+	fout << mYaw << '\t';
 
+	fout << '\n';
 }
 void status::setParam(Vect<15> b) {
 	parametr = b;

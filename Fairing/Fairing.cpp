@@ -154,10 +154,10 @@
 			std::ofstream fout3(bfilename1);
 */
 
-			std::string bfilename3 = "d_paramStep25VarAtmx64_NoMod_VarW.txt";
+			std::string bfilename3 = "d_paramStep25VarAtmx64_NoMod_VarW1.txt";
 			std::ofstream fout3(bfilename3);
 
-			std::string bfilename4 = "res_dropStep25VarAtmx64_NoMod_VarW.txt";
+			std::string bfilename4 = "res_dropStep25VarAtmx64_NoMod_VarW1.txt";
 			std::ofstream fout4(bfilename4);
 			fout4 << '\t';
 			Rocket3.printParam(fout4);
@@ -170,7 +170,7 @@
 			double dPitch = PITCH0 * 0.05;
 			double rund = dis(gen);
 			#pragma omp parallel for private(b) num_threads(4)
-			for (int i = 0; i < 100; i++) {
+			for (int i = 0; i < 0; i++) {
 				//std::string count = std::to_string(i);
 				//std::string filename = "res_varAtm" + std::to_string(1)+".txt";
 				//std::ofstream fout24(filename);

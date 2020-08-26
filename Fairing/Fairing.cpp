@@ -169,8 +169,8 @@
 			double dWz = 1 * 0.05;
 			double dPitch = PITCH0 * 0.05;
 			double rund = dis(gen);
-			#pragma omp parallel for private(b) num_threads(7)
-			for (int i = 0; i < 0; i++) {
+			#pragma omp parallel for private(b) num_threads(4)
+			for (int i = 0; i < 100; i++) {
 				//std::string count = std::to_string(i);
 				//std::string filename = "res_varAtm" + std::to_string(1)+".txt";
 				//std::ofstream fout24(filename);
@@ -179,14 +179,14 @@
 				#pragma omp critical
 				{				
 					rund = dis(gen);
-					dVz = /*dV * 0.5 * dis(gen)*/0;
-					dVy = /*sqrt(dV*dV - dVz * dVz) * dis(gen)*/0;
-					dVx = /*sqrt(dV*dV - dVz * dVz - dVy * dVy)*dis(gen)*/0;
+					dVz = dV * 0.5 * dis(gen);
+					dVy = sqrt(dV*dV - dVz * dVz) * dis(gen);
+					dVx = sqrt(dV*dV - dVz * dVz - dVy * dVy)*dis(gen);
 					
 					dWwz = 0;
-					dWwz=dWz * dis(gen);
-					dWwy = 1E-1 * dis(gen);
-					dWwx = 1E-1 * dis(gen);
+					dWwz=/*dWz * dis(gen)*/0;
+					dWwy = /*1E-1 * dis(gen)*/0;
+					dWwx = /*1E-1 * dis(gen)*/0;
 					ddPitch = 0/*dPitch * dis(gen)*/;
 					windX = 0 * dis(gen);
 					windZ = sqrt(0 * 0 - windX * windX)/**dis(gen)*/;

@@ -287,3 +287,99 @@ double MyFy(double mach, double alpha) {
 	//std::cout << i << '\t' << j << '\t' << cx << '\n';
 	return MyFr;
 }
+
+double MrB(double mach, double beta) {
+	double My[4][8] = {
+		{0, -90, -60, -30, 0, 30, 60, 90},
+		{0.6, 1.333, 2.604, 0.125, -0.208, 0.125, 2.625, 1.354},
+		{0.98, -0.354, 0.542, -0.354, -0.292, -0.333, 0.542, -0.396},
+		{1.2, -0.792, -0.375, -0.729, -0.375, -0.75, -0.396, -0.792}
+
+
+	};
+	double alphaToDeg = abs(beta) * toDeg;
+	int j;
+	for (j = 1; alphaToDeg > My[0][j + 1]; j++);
+	double MyFr = 0;
+	if (mach < 0.6) {
+		MyFr = linInterp(My[0][j], My[0][j + 1], My[1][j], My[1][j + 1], alphaToDeg);
+	}
+	else {
+		if (mach > 1.2) {
+			MyFr = linInterp(My[0][j], My[0][j + 1], My[4][j], My[4][j + 1], alphaToDeg);
+		}
+		else {
+			int i;
+			for (i = 2; (mach > My[i][0]); i++);
+			double Mr1 = linInterp(My[i - 1][0], My[i][0], My[i - 1][j], My[i][j], mach);
+			double Mr2 = linInterp(My[i - 1][0], My[i][0], My[i - 1][j + 1], My[i][j + 1], mach);
+			MyFr = linInterp(My[0][j - 1], My[0][j], Mr1, Mr2, alphaToDeg);
+		}
+	}
+	//std::cout << i << '\t' << j << '\t' << cx << '\n';
+	return MyFr;
+}
+
+double MpB(double mach, double beta) {
+	double My[4][8] = {
+		{0, -90, -60, -30, 0, 30, 60, 90},
+		{0.6, -1.84, 1.85, -2.519, -3.897, -2.519, 1.85, -1.783},
+		{0.98, -2.745, -0.028, -4.935, -8.355, -4.935, 0, -2.774},
+		{1.2, -3.28, -2.972, -4.991, -8.888, -4.935, -2.943, -3.308}
+
+
+	};
+	double alphaToDeg = abs(beta) * toDeg;
+	int j;
+	for (j = 1; alphaToDeg > My[0][j + 1]; j++);
+	double MyFr = 0;
+	if (mach < 0.6) {
+		MyFr = linInterp(My[0][j], My[0][j + 1], My[1][j], My[1][j + 1], alphaToDeg);
+	}
+	else {
+		if (mach > 1.2) {
+			MyFr = linInterp(My[0][j], My[0][j + 1], My[4][j], My[4][j + 1], alphaToDeg);
+		}
+		else {
+			int i;
+			for (i = 2; (mach > My[i][0]); i++);
+			double Mr1 = linInterp(My[i - 1][0], My[i][0], My[i - 1][j], My[i][j], mach);
+			double Mr2 = linInterp(My[i - 1][0], My[i][0], My[i - 1][j + 1], My[i][j + 1], mach);
+			MyFr = linInterp(My[0][j - 1], My[0][j], Mr1, Mr2, alphaToDeg);
+		}
+	}
+	//std::cout << i << '\t' << j << '\t' << cx << '\n';
+	return MyFr;
+}
+
+double MyB(double mach, double beta) {
+	double My[4][8] = {
+		{0, -90, -60, -30, 0, 30, 60, 90},
+		{0.6, 2.477, 0.209, -3.244, -3.244, -3.349, 0.174, 2.512},
+		{0.98, 0.663, -3.593, -4.744, -4.605, -4.779, -3.628, 0.663},
+		{1.2, 0.628, -2.442, -4.535, -4.5, -4.535, -2.477, 0.523},
+
+
+	};
+	double alphaToDeg = abs(beta) * toDeg;
+	int j;
+	for (j = 1; alphaToDeg > My[0][j + 1]; j++);
+	double MyFr = 0;
+	if (mach < 0.6) {
+		MyFr = linInterp(My[0][j], My[0][j + 1], My[1][j], My[1][j + 1], alphaToDeg);
+	}
+	else {
+		if (mach > 1.2) {
+			MyFr = linInterp(My[0][j], My[0][j + 1], My[4][j], My[4][j + 1], alphaToDeg);
+		}
+		else {
+			int i;
+			for (i = 2; (mach > My[i][0]); i++);
+			double Mr1 = linInterp(My[i - 1][0], My[i][0], My[i - 1][j], My[i][j], mach);
+			double Mr2 = linInterp(My[i - 1][0], My[i][0], My[i - 1][j + 1], My[i][j + 1], mach);
+			MyFr = linInterp(My[0][j - 1], My[0][j], Mr1, Mr2, alphaToDeg);
+		}
+	}
+	//std::cout << i << '\t' << j << '\t' << cx << '\n';
+	return MyFr;
+}

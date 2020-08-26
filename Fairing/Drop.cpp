@@ -194,13 +194,13 @@ void Drop::nonIntegr()
 	else {
 		double d = 3.4;
 		double sfa = MrFr(mach, alpha);
-		mRoll = -(sfa*parametr.vect[6] + MrFp(mach, alpha)*parametr.vect[8] + MrFy(mach, alpha)*parametr.vect[7])*d / vv;
+		mRoll = -((sfa+ MrB(mach, betta))*parametr.vect[6] /*+ MrFp(mach, alpha)*parametr.vect[8] + MrFy(mach, alpha)*parametr.vect[7]*/)*d / 2/vv;
 		/*if (abs(sfa) > 1) {
 			double sf = 0;
 			double sfa = MrFr(mach, alpha);
 		}*/
-		mPitch = (-MpFr(mach, alpha)*parametr.vect[6] + MpFp(mach, alpha)*parametr.vect[8] + MpFy(mach, alpha)*parametr.vect[7])*d / 2/vv;
-		mYaw = (-MyFr(mach, alpha)*parametr.vect[6] + MyFp(mach, alpha)*parametr.vect[8] + MyFy(mach, alpha)*parametr.vect[7])*d / 2/vv;
+		mPitch = (/*-MpFr(mach, alpha)*parametr.vect[6] + */(MpFp(mach, alpha)+MpB(mach, betta))*parametr.vect[8] /*+ MpFy(mach, alpha)*parametr.vect[7]*/)*d / 2/vv;
+		mYaw = (/*-MyFr(mach, alpha)*parametr.vect[6] + MyFp(mach, alpha)*parametr.vect[8] + */(MyFy(mach, alpha)+ MyB(mach, betta))*parametr.vect[7])*d / 2/vv;
 		double mywy = MzOmegaZPas(mach, al1, fi1);
 		//double d = (abs(betta) < 1E-7) ? 0 : betta / abs(betta);
 		double mxwx = MzOmegaZPas(mach, al1, fi1);

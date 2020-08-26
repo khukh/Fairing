@@ -11,3 +11,7 @@ double MyFp(double mach, double alpha);
 double MrFy(double mach, double alpha);
 double MpFy(double mach, double alpha);
 double MyFy(double mach, double alpha);
+
+double MrB(double mach, double beta);
+double MpB(double mach, double beta);
+double MyB(double mach, double beta);

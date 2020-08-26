@@ -4,33 +4,32 @@
 //конструктор
 Atmosphere::Atmosphere() {
 	fillArrPandT();
+	i = 0;
 }
 
 
 
 
 // функция по заданной геопотенциальной высоте возвращает бета = dT/dH
-double betaKoef(int i) {
-	//значения геопотенциальной высоты - первая строчка массива в м
-	//значения коэффициента бета=dT/dH - вторая строка массива
-	double Beta[2][12] = {
-		{ -2000.0, 0.0, 11000.0, 20000.0, 32000.0, 47000.0, 51000.0, 71000.0, 85000.0, 94.0E+3, 102.45E+3, 117.777E+3 },
-		{ -6.5E-3, -6.5E-3, 0.0, 1.0E-3, 2.8E-3, 0.0, -2.8E-3, -2.0E-3, 0.0, 3E-3, 11E-3 }
-	};
+double Atmosphere::betaKoef(int i) {
+	
 	return (Beta[1][i]);
 }
-int index(double geoPotH) {
+int Atmosphere::index(double geoPotH) {
 	//значения геопотенциальной высоты - первая строчка массива в м
 	//значения коэффициента бета=dT/dH - вторая строка массива
-	double gH[12] = { -2000.0, 0.0, 11000.0, 20000.0, 32000.0, 47000.0, 51000.0, 71000.0, 85000.0, 94.0E+3, 102.45E+3, 117.777E+3 };
+	//double gH[12] = { -2000.0, 0.0, 11000.0, 20000.0, 32000.0, 47000.0, 51000.0, 71000.0, 85000.0, 94.0E+3, 102.45E+3, 117.777E+3 };
 	int i = 0;
-	while ((geoPotH >= gH[i + 1])&(i < 11)) i++;
+	while ((geoPotH >= gPotHStand[i + 1])&(i < 11)) i++;
 
 	return (i);
 }
 double Atmosphere::tFunc(double h) {  // h = геометрическая высота
 	double gh = gHFh(h);  //геопотенциальная высота
-	i = index(gh);
+	if ((gh < gPotHStand[i]) || (gh > gPotHStand[i + 1])) {
+		i = index(gh);
+	}
+	
 	double b = betaKoef(i);
 	double t = temperature[i] + b * (gh - gPotHStand[i]);
 	return t;
@@ -108,7 +107,9 @@ void Atmosphere::fillArrPandT() {
 }
 double Atmosphere::pFunc(double h) {
 	double gh = gHFh(h);  //геопотенциальная высота
-	i = index(gh);
+	if ((gh < gPotHStand[i]) || (gh > gPotHStand[i + 1])) {
+		i = index(gh);
+	}
 	double b = betaKoef(i);
 	double tPr = temperature[i] + b * (gh - gPotHStand[i]);
 	double pPr;

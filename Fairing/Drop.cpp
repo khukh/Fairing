@@ -57,15 +57,20 @@ void Drop::nonIntegr()
 	Rot.RG.norm();
 	Rot.fromRGtoAngles();
 
-	double a11 = -cos(LON)*sin(LAT)*cos(AZIM) - sin(LON)*sin(AZIM);
-	double a12 = cos(LON)*cos(LAT);
-	double a13 = cos(LON)*sin(LAT)*sin(AZIM) - sin(LON)*cos(AZIM);
-	double a21 = -sin(LON)*sin(LAT)*cos(AZIM) + cos(LON)*sin(AZIM);
-	double a22 = sin(LON)*cos(LAT);
-	double a23 = sin(LON)*sin(LAT)*sin(AZIM) + cos(LON)*cos(AZIM);
-	double a31 = cos(LAT)*cos(AZIM);
-	double a32 = sin(LAT);
-	double a33 = -cos(LAT)*sin(AZIM);
+	double cosLON = cos(LON);
+	double sinLAT = sin(LAT);
+	double sinLON = sin(LON);
+	double cosLAT = cos(LAT);
+
+	double a11 = -cosLON * sinLAT*cos(AZIM) - sinLON * sin(AZIM);
+	double a12 = cosLON * cosLAT;
+	double a13 = cosLON * sinLAT*sin(AZIM) - sinLON * cos(AZIM);
+	double a21 = -sinLON * sinLAT*cos(AZIM) + cosLON * sin(AZIM);
+	double a22 = sinLON * cosLAT;
+	double a23 = sinLON * sinLAT*sin(AZIM) + cosLON * cos(AZIM);
+	double a31 = cosLAT * cos(AZIM);
+	double a32 = sinLAT;
+	double a33 = -cosLAT * sin(AZIM);
 
 //perevorot: = 1; //0,2,4...тангаж головой вперед
 			  //1,3,5...тангаж кормой вперед

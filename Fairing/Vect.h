@@ -45,16 +45,13 @@ public:
 
 
 		for (int i = 0; i < 3; i++) {
-			long double r1 = 0;
+			double r1 = 0;
 			for (int j = 0; j < 3; j++) {
-				long double a = A.matr[i][j];
-				long double r = b.vect[j];
-
+				double a = A.matr[i][j];
+				double r = b.vect[j];
 				r1 += a * r;
-
 			}
 			res.vect[i] = r1;
-
 		}
 		return res;
 	}

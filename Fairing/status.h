@@ -7,7 +7,7 @@
 #include "rotation.h"
 #include "Atmosphere.h"
 #include "KoefCalc.h"
-
+#include "Koef.h"
 
 
 class status {
@@ -105,6 +105,7 @@ protected:
 
 
 	double d1, a1, p1;
+	//DampingKoef Damp;
 
 };
 

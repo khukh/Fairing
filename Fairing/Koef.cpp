@@ -5,13 +5,13 @@
 //#include <math.h>
 //#include "Constants.h"
 
-double /*DampingKoef::*/linInterp(double x1, double x2, double y1, double y2, double x) {
+double DampingKoef::linInterp(double x1, double x2, double y1, double y2, double x) {
 	double y = (y2 * (x - x1) + y1 * (x2 - x)) / (x2 - x1);
 	return(y);
 }
 
 
-double /*DampingKoef::*/MrFr(double mach, double alpha) {
+double DampingKoef::MrFr(double mach, double alpha) {
 	double Mr[5][10] = {
 		{0, -180, -135, -90, -45, 0, 45, 90, 135, 180},
 		{0.6, -0.425, -0.45, 0, -0.75, -0.1866, 3.8134, -0.2134, 1.92, -0.425},
@@ -39,7 +39,7 @@ double /*DampingKoef::*/MrFr(double mach, double alpha) {
 	//std::cout << i << '\t' << j << '\t' << cx << '\n';
 	return MrFr;
 }
-double /*DampingKoef::*/MpFr(double mach, double alpha) {
+double DampingKoef::MpFr(double mach, double alpha) {
 	double Mp[5][10] = {
 		{0, -180, -135, -90, -45, 0, 45, 90, 135, 180},
 		{0.6, 0, 0, -0.3692, -0.1846, -0.0308, -0.0308, 1.5692, 0.3076, 0},
@@ -69,7 +69,7 @@ double /*DampingKoef::*/MpFr(double mach, double alpha) {
 	//std::cout << i << '\t' << j << '\t' << cx << '\n';
 	return MpFr;
 }
-double /*DampingKoef::*/MyFr(double mach, double alpha) {
+double DampingKoef::MyFr(double mach, double alpha) {
 	double My[5][10] = {
 		{0, -180, -135, -90, -45, 0, 45, 90, 135, 180},
 		{0.6, -0.338, -1.446, -0.892, 0.431, 0.308, 3.2, 1.015, -4.954, -0.246},
@@ -101,7 +101,7 @@ double /*DampingKoef::*/MyFr(double mach, double alpha) {
 }
 
 
-double /*DampingKoef::*/MrFp(double mach, double alpha) {
+double DampingKoef::MrFp(double mach, double alpha) {
 	double Mr[5][10] = {
 		{0, -180, -135, -90, -45, 0, 45, 90, 135, 180},
 		{0.6, 0, 0, 0.1412, -0.2625, -0.0187, -0.075, -0.6, 0.2471, 0.0},
@@ -131,7 +131,7 @@ double /*DampingKoef::*/MrFp(double mach, double alpha) {
 	//std::cout << i << '\t' << j << '\t' << cx << '\n';
 	return MrFr;
 }
-double /*DampingKoef::*/MpFp(double mach, double alpha) {
+double DampingKoef::MpFp(double mach, double alpha) {
 	double Mp[5][10] = {
 		{0, -180, -135, -90, -45, 0, 45, 90, 135, 180},
 		{0.6, -5.187, -3.882, -0.562, -2.625, -6.294, -8.75, -1.625, -9.812, -5.187},
@@ -161,7 +161,7 @@ double /*DampingKoef::*/MpFp(double mach, double alpha) {
 	//std::cout << i << '\t' << j << '\t' << cx << '\n';
 	return MpFr;
 }
-double /*DampingKoef::*/MyFp(double mach, double alpha) {
+double DampingKoef::MyFp(double mach, double alpha) {
 	double My[5][10] = {
 		{0, -180, -135, -90, -45, 0, 45, 90, 135, 180},
 		{0.6, -0.0, -0.0159, -0.1263, -0.4737, -0.0474, -0.0474, -0.4896, 0.3474, 0},
@@ -193,7 +193,7 @@ double /*DampingKoef::*/MyFp(double mach, double alpha) {
 	return MyFr;
 }
 
-double /*DampingKoef::*/MrFy(double mach, double alpha) {
+double DampingKoef::MrFy(double mach, double alpha) {
 	double Mr[5][10] = {
 		{0, -180, -135, -90, -45, 0, 45, 90, 135, 180},
 		{0.6, 1.686, -0.232, 0.371, -0.087, -1.536, -6.265, -0.319, 4.629, 1.686},
@@ -223,7 +223,7 @@ double /*DampingKoef::*/MrFy(double mach, double alpha) {
 	//std::cout << i << '\t' << j << '\t' << cx << '\n';
 	return MrFr;
 }
-double /*DampingKoef::*/MpFy(double mach, double alpha) {
+double DampingKoef::MpFy(double mach, double alpha) {
 	double Mp[5][10] = {
 		{0, -180, -135, -90, -45, 0, 45, 90, 135, 180},
 		{0.6, -0.516, -0.548, -0.548, -0.6915, -0.468, -0.484, -0.452, -0.3405, -0.516},
@@ -253,7 +253,7 @@ double /*DampingKoef::*/MpFy(double mach, double alpha) {
 	//std::cout << i << '\t' << j << '\t' << cx << '\n';
 	return MpFr;
 }
-double /*DampingKoef::*/MyFy(double mach, double alpha) {
+double DampingKoef::MyFy(double mach, double alpha) {
 	double My[5][10] = {
 		{0, -180, -135, -90, -45, 0, 45, 90, 135, 180},
 		{0.6, -3.0937, -2.6512, -6.7442, -5.8594, -3.2578, -2.186, -0.1395, -3.2344, -3.0937},
@@ -286,7 +286,7 @@ double /*DampingKoef::*/MyFy(double mach, double alpha) {
 	return MyFr;
 }
 
-double /*DampingKoef::*/MrB(double mach, double beta) {
+double DampingKoef::MrB(double mach, double beta) {
 	double My[4][8] = {
 		{0, -90, -60, -30, 0, 30, 60, 90},
 		{0.6, 1.333, 2.604, 0.125, -0.208, 0.125, 2.625, 1.354},
@@ -317,7 +317,7 @@ double /*DampingKoef::*/MrB(double mach, double beta) {
 	//std::cout << i << '\t' << j << '\t' << cx << '\n';
 	return MyFr;
 }
-double /*DampingKoef::*/MpB(double mach, double beta) {
+double DampingKoef::MpB(double mach, double beta) {
 	double My[4][8] = {
 		{0, -90, -60, -30, 0, 30, 60, 90},
 		{0.6, -1.84, 1.85, -2.519, -3.897, -2.519, 1.85, -1.783},
@@ -348,7 +348,7 @@ double /*DampingKoef::*/MpB(double mach, double beta) {
 	//std::cout << i << '\t' << j << '\t' << cx << '\n';
 	return MyFr;
 }
-double /*DampingKoef::*/MyB(double mach, double beta) {
+double DampingKoef::MyB(double mach, double beta) {
 	double My[4][8] = {
 		{0, -90, -60, -30, 0, 30, 60, 90},
 		{0.6, 2.477, 0.209, -3.244, -3.244, -3.349, 0.174, 2.512},
@@ -380,10 +380,10 @@ double /*DampingKoef::*/MyB(double mach, double beta) {
 	return MyFr;
 }
 
-/*DampingKoef::~DampingKoef()
+DampingKoef::~DampingKoef()
 {
 }
 
 DampingKoef::DampingKoef()
 {
-}*/
+}

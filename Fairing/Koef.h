@@ -1,7 +1,9 @@
 #pragma once
-/*class DampingKoef{
+class DampingKoef{
 public:
-	DampingKoef();*/
+	DampingKoef();
+	
+	~DampingKoef();
 	double linInterp(double x1, double x2, double y1, double y2, double x);
 	double MrFr(double mach, double alpha);
 	double MpFr(double mach, double alpha);
@@ -18,6 +20,4 @@ public:
 	double MrB(double mach, double beta);
 	double MpB(double mach, double beta);
 	double MyB(double mach, double beta);
-	/*~DampingKoef();
-
-};*/
+};

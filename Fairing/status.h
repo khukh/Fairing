@@ -105,7 +105,7 @@ protected:
 
 
 	double d1, a1, p1;
-	//DampingKoef Damp;
+	DampingKoef Damp;
 
 };
 

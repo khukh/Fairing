@@ -114,7 +114,7 @@
 				if (h1 < 1E-7) {
 					h1 = 1E-7;
 				}*/
-				if (count % 1 == 0/*(fabs(Rocket3.getParam().vect[13] * 1000 - round(Rocket3.getParam().vect[13] * 1000)) < EPS1)
+				if (count % 5000 == 0/*(fabs(Rocket3.getParam().vect[13] * 1000 - round(Rocket3.getParam().vect[13] * 1000)) < EPS1)
 					&& ((int)round(Rocket3.getParam().vect[13] * 1000) % 5 == 0)*/) {
 					Rocket3.printParam(fout2);
 

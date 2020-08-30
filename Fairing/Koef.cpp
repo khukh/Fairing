@@ -304,7 +304,7 @@ double DampingKoef::MrB(double mach, double beta) {
 	}
 	else {
 		if (mach > 1.2) {
-			MyFr = linInterp(My[0][j], My[0][j + 1], My[4][j], My[4][j + 1], alphaToDeg);
+			MyFr = linInterp(My[0][j], My[0][j + 1], My[3][j], My[3][j + 1], alphaToDeg);
 		}
 		else {
 			int i;
@@ -335,7 +335,7 @@ double DampingKoef::MpB(double mach, double beta) {
 	}
 	else {
 		if (mach > 1.2) {
-			MyFr = linInterp(My[0][j], My[0][j + 1], My[4][j], My[4][j + 1], alphaToDeg);
+			MyFr = linInterp(My[0][j], My[0][j + 1], My[3][j], My[3][j + 1], alphaToDeg);
 		}
 		else {
 			int i;
@@ -366,7 +366,7 @@ double DampingKoef::MyB(double mach, double beta) {
 	}
 	else {
 		if (mach > 1.2) {
-			MyFr = linInterp(My[0][j], My[0][j + 1], My[4][j], My[4][j + 1], alphaToDeg);
+			MyFr = linInterp(My[0][j], My[0][j + 1], My[3][j], My[3][j + 1], alphaToDeg);
 		}
 		else {
 			int i;

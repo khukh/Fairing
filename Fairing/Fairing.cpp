@@ -121,7 +121,7 @@
 				}
 				count++;
 			//	traj.push_back(Rocket3);
-				if (Rocket3.getH() < 2E+4) {
+				if (Rocket3.getH() < 1) {
 					buf3 = Rocket3;
 					//buf = Rocket;
 				}
@@ -129,9 +129,9 @@
 					flag = true;
 					h1 /= 5000;
 			}*/
-				/*if (count == 31600) {
+				if (count == 15157786) {
 					double g = 0;
-				}*/
+				}
 				runge(Rocket3, h1);
 				
 

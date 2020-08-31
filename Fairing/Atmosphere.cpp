@@ -77,7 +77,7 @@ double Atmosphere::gHFh(double h) {
 
 void Atmosphere::fillArrPandT() {
 	double b;
-	for (int i = 0; i <= 12; i++) {
+	for (int i = 0; i < 12; i++) {
 
 		switch (i) {
 		case 0:

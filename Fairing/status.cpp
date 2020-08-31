@@ -8,7 +8,7 @@
 #include <fstream>
 
 
-status::status(std::vector <double> &coordinates) : Rot(coordinates[9], coordinates[10], coordinates[11]), fromSvToA(0,0,0), GOST4401(), Damp(){
+status::status(std::vector <double> &coordinates) : Rot(coordinates[9], coordinates[10], coordinates[11]), fromSvToA(0,0,0), GOST4401(), Damp() {
 
 	//скорости
 	parametr.vect[0] = coordinates[0];

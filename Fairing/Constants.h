@@ -28,7 +28,7 @@ const double L = 7;
 //const double V0 = 1200; //модуль скорости
 
 
-const double H = 0.0001;
+const double H = 0.00005;
 const double T_FIN = 10.0;
 const double EPS1 = 1E-6;
 

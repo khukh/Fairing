@@ -199,7 +199,7 @@ void Drop::nonIntegr()
 	else {
 		double d = 3.4;
 		double sfa = Damp.MrFr(mach, alpha);
-		mRoll = -((sfa+ Damp.MrB(mach, betta))*parametr.vect[6] /*+ MrFp(mach, alpha)*parametr.vect[8] + MrFy(mach, alpha)*parametr.vect[7]*/)*d / 2/vv;
+		mRoll = -((sfa/*+ Damp.MrB(mach, betta)*/)*parametr.vect[6] /*+ MrFp(mach, alpha)*parametr.vect[8] + MrFy(mach, alpha)*parametr.vect[7]*/)*d / 2/vv;
 		/*if (abs(sfa) > 1) {
 			double sf = 0;
 			double sfa = MrFr(mach, alpha);
